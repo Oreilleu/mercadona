@@ -1,0 +1,15 @@
+namespace Mercadona.Models
+{
+    public class Product
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = "chaussure";
+
+        public string Description { get; set; } = "Belle chausssure rouge";
+
+        public decimal Price { get; set; } = 10;
+
+        public CategoryClass Class { get; set; } = CategoryClass.Clothe;
+
+    }
+}

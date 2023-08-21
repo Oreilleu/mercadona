@@ -1,0 +1,101 @@
+global using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+
+namespace Mercadona.Services.ProductService
+{
+    public class ProductService : IProductService
+    {
+
+        private readonly IMapper _mapper;
+        private readonly DataContext _context;
+        public ProductService(IMapper mapper, DataContext context)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+
+        public async Task<ServiceResponse<List<GetProductDto>>> GetAllProduct()
+        {
+            var serviceResponse = new ServiceResponse<List<GetProductDto>>();
+            var dbProducts = await _context.Products.ToListAsync();
+            serviceResponse.Data = dbProducts.Select(p => _mapper.Map<GetProductDto>(p)).ToList();
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<GetProductDto>> GetProductById(int id)
+        {
+            var serviceResponse = new ServiceResponse<GetProductDto>();
+            var dbProducts = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+            serviceResponse.Data = _mapper.Map<GetProductDto>(dbProducts);
+            return serviceResponse;
+
+        }
+
+        public async Task<ServiceResponse<List<GetProductDto>>> AddProduct(AddProductDto newProduct)
+        {
+            var serviceResponse = new ServiceResponse<List<GetProductDto>>();
+            var product = _mapper.Map<Product>(newProduct);
+            _context.Products.Add(product);
+            await _context.SaveChangesAsync();
+            serviceResponse.Data =
+                await _context.Products.Select(p => _mapper.Map<GetProductDto>(p)).ToListAsync();
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<GetProductDto>> UpdateProduct(UpdateProductDto updatedProduct)
+        {
+            var serviceResponse = new ServiceResponse<GetProductDto>();
+
+            try
+            {
+
+                var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == updatedProduct.Id);
+
+                if (product == null)
+                    throw new Exception($"Product with id {updatedProduct.Id} not found");
+
+                product.Name = updatedProduct.Name;
+                product.Description = updatedProduct.Description;
+                product.Price = updatedProduct.Price;
+                product.Class = updatedProduct.Class;
+
+                await _context.SaveChangesAsync();
+                serviceResponse.Data = _mapper.Map<GetProductDto>(product);
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<List<GetProductDto>>> DeleteProduct(int id)
+        {
+            var serviceResponse = new ServiceResponse<List<GetProductDto>>();
+
+            try
+            {
+
+                var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+
+                if (product == null)
+                    throw new Exception($"Product with id {id} not found");
+
+                _context.Products.Remove(product);
+
+                await _context.SaveChangesAsync();
+
+                serviceResponse.Data = await _context.Products.Select(p => _mapper.Map<GetProductDto>(p)).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+
+            return serviceResponse;
+        }
+    }
+}
