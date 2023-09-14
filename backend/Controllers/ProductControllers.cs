@@ -1,9 +1,11 @@
 using Mercadona.Models;
 using Mercadona.Services.ProductService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mercadona.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ProductControllers : ControllerBase
