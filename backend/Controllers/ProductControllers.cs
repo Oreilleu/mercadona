@@ -17,6 +17,7 @@ namespace Mercadona.Controllers
             _productService = productService;
         }
 
+        [AllowAnonymous]
         [HttpGet("GetAll")]
         public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> Get()
         {
