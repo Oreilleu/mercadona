@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Mercadona.Dtos.Product
+namespace Mercadona.Dtos.ProductDto
 {
     public class UpdateProductDto
     {
@@ -14,6 +14,5 @@ namespace Mercadona.Dtos.Product
 
         public Category? Category { get; set; }
         public int CategoryId { get; set; }
-
     }
 }

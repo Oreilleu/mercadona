@@ -1,4 +1,3 @@
-using Mercadona.Dtos.Product;
 
 namespace Mercadona.Services.ProductService
 {

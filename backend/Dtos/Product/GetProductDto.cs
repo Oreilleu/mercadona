@@ -1,4 +1,4 @@
-namespace Mercadona.Dtos.Product
+namespace Mercadona.Dtos.ProductDto
 {
     public class GetProductDto
     {

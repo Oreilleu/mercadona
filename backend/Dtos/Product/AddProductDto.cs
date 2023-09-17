@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Mercadona.Dtos.Product
+namespace Mercadona.Dtos.ProductDto
 {
     public class AddProductDto
     {
@@ -11,6 +11,6 @@ namespace Mercadona.Dtos.Product
         public decimal Price { get; set; } 
         [JsonIgnore]
         public Category? Category { get; set; }
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
     }
 }
