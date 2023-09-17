@@ -3,14 +3,12 @@ namespace Mercadona.Dtos.Product
     public class GetProductDto
     {
         public int Id { get; set; } = 1;
-        public string Name { get; set; } = "chaussure";
+        public string Name { get; set; } = string.Empty;
 
-        public string Description { get; set; } = "Belle chausssure rouge";
+        public string Description { get; set; } = string.Empty;
 
-        public decimal Price { get; set; } = 10;
+        public decimal Price { get; set; } 
 
-        public CategoryClass Class { get; set; } = CategoryClass.Clothe;
-
-
+        public Category? Category { get; set; }
     }
 }

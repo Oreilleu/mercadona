@@ -1,15 +1,16 @@
+using System.Text.Json.Serialization;
+
 namespace Mercadona.Dtos.Product
 {
     public class AddProductDto
     {
-        public string Name { get; set; } = "chaussure";
+        public string Name { get; set; } = string.Empty;
 
-        public string Description { get; set; } = "Belle chausssure rouge";
+        public string Description { get; set; } = string.Empty;
 
-        public decimal Price { get; set; } = 10;
-
-        public CategoryClass Class { get; set; } = CategoryClass.Clothe;
-
-
+        public decimal Price { get; set; } 
+        [JsonIgnore]
+        public Category? Category { get; set; }
+        public int CategoryId { get; set; }
     }
 }

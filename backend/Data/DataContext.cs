@@ -12,5 +12,7 @@ namespace Mercadona.Data
         public DbSet<Product> Products => Set<Product>();
         public DbSet<User> Users => Set<User>();
 
+        public DbSet<Category> Categories => Set<Category>();
+
     }
 }

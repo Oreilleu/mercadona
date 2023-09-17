@@ -4,8 +4,6 @@ global using Mercadona.Dtos.Product;
 global using Mercadona.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-// using Microsoft.AspNetCore.Authentication;
-using System.Formats.Tar;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Filters;
 using Microsoft.OpenApi.Models;

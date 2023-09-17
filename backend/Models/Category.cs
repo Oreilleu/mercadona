@@ -2,12 +2,12 @@ using System.Text.Json.Serialization;
 
 namespace Mercadona.Models
 {
-    [JsonConverter(typeof(JsonStringEnumConverter))]
-    public enum CategoryClass
+    public class Category
     {
-        Clothe = 1,
-        Food = 2,
-        Drink = 3,
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        [JsonIgnore]
+        public List<Product>? Products { get; set; }
     }
 
 }
