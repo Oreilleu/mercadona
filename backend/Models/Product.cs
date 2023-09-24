@@ -12,6 +12,7 @@ namespace Mercadona.Models
         public string Image { get; set; } = string.Empty;
         
         public Category? Category { get; set; } 
+        
         public Promotion? Promotion { get; set; }
 
     }

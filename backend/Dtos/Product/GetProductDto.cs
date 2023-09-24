@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Mercadona.Dtos.ProductDto
 {
     public class GetProductDto
@@ -9,7 +11,8 @@ namespace Mercadona.Dtos.ProductDto
 
         public decimal Price { get; set; } 
 
-        public Category? Category { get; set; }
-        public Promotion? Promotion { get; set; }
+        public GetCategoryDto? Category { get; set; }
+
+        public GetPromotionDto? Promotion { get; set; }
     }
 }
