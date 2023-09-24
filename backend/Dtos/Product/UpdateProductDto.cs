@@ -14,5 +14,8 @@ namespace Mercadona.Dtos.ProductDto
 
         public Category? Category { get; set; }
         public int CategoryId { get; set; }
+        [JsonIgnore]
+        public Promotion? Promotion { get; set; }
+        public int PromotionId { get; set; }
     }
 }

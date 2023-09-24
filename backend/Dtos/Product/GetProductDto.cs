@@ -10,5 +10,6 @@ namespace Mercadona.Dtos.ProductDto
         public decimal Price { get; set; } 
 
         public Category? Category { get; set; }
+        public Promotion? Promotion { get; set; }
     }
 }

@@ -67,6 +67,9 @@ namespace Mercadona.Services.CategoryService
                 
                 if(category is null)
                     throw new Exception($"Category with id {updatedCategory.Id} not found");
+                
+                if(category.Name == "Autre")
+                    throw new Exception("Impossible de modifier la catégorie 'Autre'");
 
                 category.Name = updatedCategory.Name;
 
@@ -94,8 +97,12 @@ namespace Mercadona.Services.CategoryService
             try
             {
                 var category = _context.Categories.FirstOrDefault(p => p.Id == id);
+
                 if(category is null)
                     throw new Exception($"Category with id {id} not found");
+                
+                if(category.Name == "Autre")
+                    throw new Exception("Impossible de supprimer la catégorie 'Autre'");
 
                 _context.Categories.Remove(category);
 
@@ -111,8 +118,5 @@ namespace Mercadona.Services.CategoryService
 
             return serviceResponse;
         }
-
-
-
     }
 }

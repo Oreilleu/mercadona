@@ -15,6 +15,7 @@ namespace Mercadona.Data
         public DbSet<User> Users => Set<User>();
 
         public DbSet<Category> Categories => Set<Category>();
+        public DbSet<Promotion> Promotions => Set<Promotion>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -22,6 +23,11 @@ namespace Mercadona.Data
 
             // Configuration de l'index unique sur la colonne "Name" de l'entité "Category"
             modelBuilder.Entity<Category>()
+                .HasIndex(c => c.Name)
+                .IsUnique();
+            
+            // Configuration de l'index unique sur la colonne "Name" de l'entité "Promotion"
+            modelBuilder.Entity<Promotion>()
                 .HasIndex(c => c.Name)
                 .IsUnique();
         }

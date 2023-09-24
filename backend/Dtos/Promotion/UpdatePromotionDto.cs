@@ -1,16 +1,13 @@
 using System.Text.Json.Serialization;
-using Microsoft.Identity.Client;
 
-namespace Mercadona.Models
+namespace Mercadona.Dtos.PromotionDto
 {
-    public class Promotion
+    public class UpdatePromotionDto
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public DateTime StartingDate { get; set; } 
         public DateTime EndingDate { get; set; } 
-        public List<Product>? Products { get; set; }
         public int DiscountPercentage { get; set; } 
     }
-
 }

@@ -2,6 +2,7 @@ global using Mercadona.Models;
 global using Mercadona.Services.ProductService;
 global using Mercadona.Dtos.ProductDto;
 global using Mercadona.Dtos.CategoryDto;
+global using Mercadona.Dtos.PromotionDto;
 global using Mercadona.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -9,6 +10,8 @@ using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Filters;
 using Microsoft.OpenApi.Models;
 using Mercadona.Services.CategoryService;
+using Mercadona.Services.PromotionService;
+using Mercadoa.Services.PromotionService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +40,7 @@ builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IPromotionService, PromotionService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(opt => 
     {

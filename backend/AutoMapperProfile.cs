@@ -9,6 +9,9 @@ namespace Mercadona
             CreateMap<Category, GetCategoryDto>();
             CreateMap<Category, GetCategoryByIdDto>();
             CreateMap<AddCategoryDto, Category>();
+            CreateMap<Promotion, GetPromotionDto>();
+            CreateMap<Promotion, GetPromotionByIdDto>();
+            CreateMap<AddPromotionDto, Promotion>();
         }
     }
 }
