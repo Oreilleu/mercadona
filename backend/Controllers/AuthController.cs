@@ -40,6 +40,19 @@ namespace Mercadona.Controllers
             }
 
             return Ok(response);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ServiceResponse<GetUserDto>>> Delete(UserLoginDto request)
+        {
+            var response = await _authRepo.DeleteUser(request.Id);
+
+            if(!response.Success)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
         }   
     }
 }

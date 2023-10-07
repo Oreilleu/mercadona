@@ -1,6 +1,7 @@
 
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Mercadona.Dtos.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -8,12 +9,14 @@ namespace Mercadona.Data
 {
     public class AuthRepository : IAuthRepository
     {
+        private readonly IMapper _mapper;
         private readonly DataContext _context;
         private readonly IConfiguration _configuration;
-        public AuthRepository(DataContext context, IConfiguration configuration)
+        public AuthRepository(DataContext context, IConfiguration configuration, IMapper mapper)
         {
             _configuration = configuration;
             _context = context;
+            _mapper = mapper;
         }
         public async Task<ServiceResponse<string>> Login(string username, string password)
         {
@@ -57,6 +60,32 @@ namespace Mercadona.Data
             await _context.SaveChangesAsync();
             response.Data = user.Id;
             return response;
+        }
+
+        public async Task<ServiceResponse<List<GetUserDto>>> DeleteUser(int id)
+        {
+            var serviceResponse = new ServiceResponse<List<GetUserDto>>();
+
+            try
+            {
+                var user = await _context.Users.FirstOrDefaultAsync(p => p.Id == id);
+
+                if(user is null)
+                    throw new Exception($"User with id {id} not found");
+
+                _context.Users.Remove(user);
+
+                await _context.SaveChangesAsync();
+
+                serviceResponse.Data = await _context.Users.Select(u => _mapper.Map<GetUserDto>(u)).ToListAsync();
+            }
+            catch(Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+
+            return serviceResponse;
         }
 
         public async Task<bool> UserExists(string username)
