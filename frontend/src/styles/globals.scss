@@ -1,3 +1,14 @@
 @import '~bootstrap/scss/bootstrap';
 @import "./bootstrap-themed.scss";
+
+
+p {
+  margin-bottom: 0;
+}
+
 @import "./components/Header.scss";
+@import "./components/Banner.scss";
+@import "./components/Footer.scss";
+@import "./components/ProductCard.scss";
+
+@import "./pages/Homepage.scss";
