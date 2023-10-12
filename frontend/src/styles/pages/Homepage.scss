@@ -27,10 +27,25 @@
   }
 
   .container-list-product-card {
+    padding: 0;
 
     h2 {
       text-align: center;
       margin-bottom: 20px;
+    }
+
+    .list-product-card {
+      @extend .list-unstyled;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      @media screen and (min-width: 768px) {
+        flex-direction: row;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
     }
   }
 }

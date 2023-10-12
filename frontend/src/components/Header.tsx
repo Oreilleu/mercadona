@@ -5,7 +5,7 @@ export default function Header() {
     <Container as="header" className="container-header">
       <p className="logo">Mercadona</p>
       <button>Admin</button>
-      <p className="btn-promotion">Promotion</p>
+      {/* <p className="btn-promotion">Promotion</p> */}
     </Container>
   );
 }
