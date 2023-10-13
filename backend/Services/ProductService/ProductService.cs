@@ -17,7 +17,7 @@ namespace Mercadona.Services.ProductService
         public async Task<ServiceResponse<List<GetProductDto>>> GetAllProduct()
         {
             var serviceResponse = new ServiceResponse<List<GetProductDto>>();
-            var dbProducts = await _context.Products.Include(p => p.Category).ToListAsync();
+            var dbProducts = await _context.Products.Include(p => p.Category).Include(p => p.Promotion).ToListAsync();
             serviceResponse.Data = dbProducts.Select(p => _mapper.Map<GetProductDto>(p)).ToList();
             return serviceResponse;
         }
@@ -25,7 +25,7 @@ namespace Mercadona.Services.ProductService
         public async Task<ServiceResponse<GetProductDto>> GetProductById(int id)
         {
             var serviceResponse = new ServiceResponse<GetProductDto>();
-            var dbProducts = await _context.Products.Include(p => p.Category).FirstOrDefaultAsync(p => p.Id == id);
+            var dbProducts = await _context.Products.Include(p => p.Category).Include(p => p.Promotion).FirstOrDefaultAsync(p => p.Id == id);
             serviceResponse.Data = _mapper.Map<GetProductDto>(dbProducts);
             return serviceResponse;
 
@@ -37,22 +37,22 @@ namespace Mercadona.Services.ProductService
 
             try
             {
-            var category = await _context.Categories.FindAsync(newProduct.CategoryId);
+                var category = await _context.Categories.FindAsync(newProduct.CategoryId);
 
-            if(category is null)
-                throw new Exception($"Category with id {newProduct.CategoryId} not found");
+                if (category is null)
+                    throw new Exception($"Category with id {newProduct.CategoryId} not found");
 
-            var product = _mapper.Map<Product>(newProduct);
-            product.Category = category;
-            
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
-            
-            serviceResponse.Data =
-                await _context.Products.Select(p => _mapper.Map<GetProductDto>(p)).ToListAsync();
-            
+                var product = _mapper.Map<Product>(newProduct);
+                product.Category = category;
+
+                _context.Products.Add(product);
+                await _context.SaveChangesAsync();
+
+                serviceResponse.Data =
+                    await _context.Products.Select(p => _mapper.Map<GetProductDto>(p)).ToListAsync();
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 serviceResponse.Success = false;
                 serviceResponse.Message = ex.Message;
@@ -73,7 +73,7 @@ namespace Mercadona.Services.ProductService
 
                 if (product is null)
                     throw new Exception($"Product with id {updatedProduct.Id} not found");
-                
+
                 if (category is null)
                     throw new Exception($"Category with id {updatedProduct.CategoryId} not found");
 
