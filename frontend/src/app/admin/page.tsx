@@ -79,11 +79,14 @@ export default function Admin() {
           <div className="container-button-filter">
             <select onChange={(e) => setSelectedCategory(e.target.value)} name="category" id="category">
               <option value="">Catégorie</option>
-              {listCategories?.map((category: Category, index: number) => (
-                <option key={`CATEGORY INDEX ${index}`} value={category.name}>
-                  {category.name}
-                </option>
-              ))}
+              {listCategories?.map(
+                (category: Category, index: number) =>
+                  category.products.length !== 0 && (
+                    <option key={`CATEGORY INDEX ${index}`} value={category.name}>
+                      {category.name}
+                    </option>
+                  )
+              )}
             </select>
             <Button onClick={() => setShowPromotion(!showPromotion)} className="button-promotion">
               Afficher les produit en promotion <span>{showPromotion ? 'ON' : 'OFF'}</span>

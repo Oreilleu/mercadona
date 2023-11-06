@@ -1,6 +1,7 @@
 export type Category = {
   id: number;
   name: string;
+  products: Product[];
 };
 
 export type Promotion = {

@@ -43,7 +43,7 @@ export default function ModalHandle({ showModal, setShowModal, products, categor
       const response = await fetch('https://localhost:7208/api/Category', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(newCategory),
+        body: JSON.stringify({ id: newCategory.id, name: newCategory.name }),
       });
 
       if (response.ok) {
@@ -54,10 +54,6 @@ export default function ModalHandle({ showModal, setShowModal, products, categor
       console.error("Une erreur s'est produite lors de la modification de la catégorie :", error);
     }
   };
-
-  console.log('categories', categories);
-
-  console.log('products', products);
 
   return (
     <>
@@ -88,7 +84,9 @@ export default function ModalHandle({ showModal, setShowModal, products, categor
                           <div className="container-input">
                             <input
                               type="text"
-                              onChange={(e) => setNewCategory({ id: category.id, name: e.target.value })}
+                              onChange={(e) =>
+                                setNewCategory({ id: category.id, name: e.target.value, products: category.products })
+                              }
                               disabled={!(selectedIdCategory === category.id)}
                             />
                             <Button type="submit" onClick={() => newCategory && modifyCategory(newCategory)}>

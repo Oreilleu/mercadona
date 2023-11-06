@@ -13,7 +13,7 @@ import { Button, Container } from 'react-bootstrap';
 export default function Home() {
   const [showPromotion, setShowPromotion] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [listCategories, setListCategories] = useState<string[]>([]);
+  const [listCategories, setListCategories] = useState<Category[]>([]);
   const [productsData, setProductsData] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
 
@@ -43,7 +43,7 @@ export default function Home() {
         const response = await fetch('https://localhost:7208/api/Category/GetAll');
         if (response.ok) {
           const data = await response.json();
-          setListCategories(data.data.map((category: Category) => category.name));
+          setListCategories(data.data);
         } else {
           console.error('Les données demandées ne sont pas disponibles.');
         }
@@ -66,11 +66,14 @@ export default function Home() {
           <Container className="container-button">
             <select onChange={(e) => setSelectedCategory(e.target.value)} name="category" id="category">
               <option value="">Catégorie</option>
-              {listCategories?.map((category: string, index: number) => (
-                <option key={`CATEGORY INDEX ${index}`} value={category}>
-                  {category}
-                </option>
-              ))}
+              {listCategories?.map(
+                (category: Category, index: number) =>
+                  category.products.length !== 0 && (
+                    <option key={`CATEGORY INDEX ${index}`} value={category.name}>
+                      {category.name}
+                    </option>
+                  )
+              )}
             </select>
             <Button onClick={() => setShowPromotion(!showPromotion)} className="button-promotion">
               Afficher les produit en promotion <span>{showPromotion ? 'ON' : 'OFF'}</span>

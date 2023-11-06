@@ -13,7 +13,7 @@ namespace Mercadona.Dtos.ProductDto
 
         public string Image { get; set; } = string.Empty;
 
-        public GetCategoryDto? Category { get; set; }
+        public GetCategoryForProductDto? Category { get; set; }
 
         public GetPromotionDto? Promotion { get; set; }
     }
