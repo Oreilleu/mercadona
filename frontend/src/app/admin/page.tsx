@@ -1,21 +1,22 @@
 'use client';
 import Banner from '@/components/Banner';
 import Layout from '@/components/Layout';
+import ModalHandle from '@/components/ModalHandle';
 import ProductCard from '@/components/ProductCard';
 import { filterproducts } from '@/utils/services';
 import { Category, Product } from '@/utils/types';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Button, Container } from 'react-bootstrap';
 
-// TODO : Ajouter une image à la base de données
-// TODO : Filtrer en fonction de la catégorie et du boolean promotion
-
-export default function Home() {
-  const [showPromotion, setShowPromotion] = useState(false);
+export default function Admin() {
+  const router = useRouter();
+  const [productsData, setProductsData] = useState();
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [listCategories, setListCategories] = useState<string[]>([]);
-  const [productsData, setProductsData] = useState<Product[]>([]);
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>();
+  const [listCategories, setListCategories] = useState<Category[]>();
+  const [showPromotion, setShowPromotion] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     if (!productsData) return;
@@ -24,6 +25,12 @@ export default function Home() {
   }, [productsData, selectedCategory, showPromotion]);
 
   useEffect(() => {
+    const token = document.cookie.split('=')[1];
+
+    if (!token) {
+      router.push('/connexion');
+    }
+
     const getProducts = async () => {
       try {
         const response = await fetch('https://localhost:7208/api/ProductControllers/GetAll');
@@ -43,7 +50,7 @@ export default function Home() {
         const response = await fetch('https://localhost:7208/api/Category/GetAll');
         if (response.ok) {
           const data = await response.json();
-          setListCategories(data.data.map((category: Category) => category.name));
+          setListCategories(data.data);
         } else {
           console.error('Les données demandées ne sont pas disponibles.');
         }
@@ -57,44 +64,47 @@ export default function Home() {
   }, []);
 
   return (
-    <Layout className="container-homepage">
-      <Banner title="Catalogue" />
-      {productsData.length === 0 ? (
-        <p className="text-center text-danger">Il n'y a pas de produit à afficher</p>
-      ) : (
-        <>
-          <Container className="container-button">
+    <Layout className="container-admin">
+      <ModalHandle showModal={showModal} setShowModal={setShowModal} products={productsData} categories={listCategories} />
+
+      <Banner title="Admin" />
+      <Container className="container-button">
+        {/* <Button>Gestion des administrateurs</Button> */}
+        <Button onClick={() => setShowModal(true)}>Gestion categories</Button>
+        <Button>Gestion des promotions</Button>
+      </Container>
+      <Container className="container-list-product-card">
+        <h2>Produits</h2>
+        <Container>
+          <div className="container-button-filter">
             <select onChange={(e) => setSelectedCategory(e.target.value)} name="category" id="category">
               <option value="">Catégorie</option>
-              {listCategories?.map((category: string, index: number) => (
-                <option key={`CATEGORY INDEX ${index}`} value={category}>
-                  {category}
+              {listCategories?.map((category: Category, index: number) => (
+                <option key={`CATEGORY INDEX ${index}`} value={category.name}>
+                  {category.name}
                 </option>
               ))}
             </select>
             <Button onClick={() => setShowPromotion(!showPromotion)} className="button-promotion">
               Afficher les produit en promotion <span>{showPromotion ? 'ON' : 'OFF'}</span>
             </Button>
-          </Container>
-          <Container className="container-list-product-card">
-            <h2>Produits</h2>
-            <ul className="list-product-card">
-              {filteredProducts?.map((product: Product, index: number) => (
-                <li key={`PRODUCT INDEX ${index} - PRODUCT ID ${product.id}`}>
-                  <ProductCard
-                    name={product.name}
-                    price={product.price}
-                    description={product.description}
-                    image={product.image}
-                    category={product.category}
-                    promotion={product.promotion}
-                  />
-                </li>
-              ))}
-            </ul>
-          </Container>
-        </>
-      )}
+          </div>
+          <ul className="list-product-card">
+            {filteredProducts?.map((product: Product, index: number) => (
+              <li key={`PRODUCT INDEX ${index} - PRODUCT ID ${product.id}`}>
+                <ProductCard
+                  name={product.name}
+                  price={product.price}
+                  description={product.description}
+                  image={product.image}
+                  category={product.category}
+                  promotion={product.promotion}
+                />
+              </li>
+            ))}
+          </ul>
+        </Container>
+      </Container>
     </Layout>
   );
 }

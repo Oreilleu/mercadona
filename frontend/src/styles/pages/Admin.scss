@@ -1,0 +1,74 @@
+.container-admin {
+  .container-button {
+    padding: 30px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    @media screen and (min-width: 768px) {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
+    button {
+      min-width: 250px;
+      background-color: #00AB61!important;
+      border: none;
+
+      @media screen and (min-width: 768px) {
+        min-width: 220px;
+      }
+    }
+  }
+
+  .container-button-filter {
+    padding: 30px 0;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 20px;
+
+    @media screen and (min-width: 768px) {
+      flex-direction: row;
+      justify-content: space-between;
+      gap : 0;
+    }
+
+    select {
+      width: 308px;
+      height: 36px;
+      border-radius: 5px;
+    }
+
+
+    .button-promotion {
+      background-color: #00AB61!important;
+      border: none;
+    }
+  }
+
+  .container-list-product-card {
+    padding: 0;
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .list-product-card {
+      @extend .list-unstyled;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      @media screen and (min-width: 768px) {
+        flex-direction: row;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+    }
+  }
+}

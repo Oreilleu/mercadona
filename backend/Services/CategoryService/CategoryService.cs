@@ -17,7 +17,7 @@ namespace Mercadona.Services.CategoryService
         public async Task<ServiceResponse<List<GetCategoryDto>>> GetAllCategory()
         {
             var serviceResponse = new ServiceResponse<List<GetCategoryDto>>();
-            var dbCategories = await _context.Categories.ToListAsync();
+            var dbCategories = await _context.Categories.Include(c => c.Products).ToListAsync();
             serviceResponse.Data = dbCategories.Select(p => _mapper.Map<GetCategoryDto>(p)).ToList();
             return serviceResponse;
         }
@@ -42,12 +42,12 @@ namespace Mercadona.Services.CategoryService
                 serviceResponse.Data =
                     await _context.Categories.Select(p => _mapper.Map<GetCategoryDto>(p)).ToListAsync();
             }
-            catch (DbUpdateException) 
+            catch (DbUpdateException)
             {
                 serviceResponse.Success = false;
                 serviceResponse.Message = "Une catégorie avec ce nom existe déjà";
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 serviceResponse.Success = false;
                 serviceResponse.Message = ex.Message;
@@ -64,11 +64,11 @@ namespace Mercadona.Services.CategoryService
             try
             {
                 var category = await _context.Categories.FindAsync(updatedCategory.Id);
-                
-                if(category is null)
+
+                if (category is null)
                     throw new Exception($"Category with id {updatedCategory.Id} not found");
-                
-                if(category.Name == "Autre")
+
+                if (category.Name == "Autre")
                     throw new Exception("Impossible de modifier la catégorie 'Autre'");
 
                 category.Name = updatedCategory.Name;
@@ -98,10 +98,10 @@ namespace Mercadona.Services.CategoryService
             {
                 var category = _context.Categories.FirstOrDefault(p => p.Id == id);
 
-                if(category is null)
+                if (category is null)
                     throw new Exception($"Category with id {id} not found");
-                
-                if(category.Name == "Autre")
+
+                if (category.Name == "Autre")
                     throw new Exception("Impossible de supprimer la catégorie 'Autre'");
 
                 _context.Categories.Remove(category);

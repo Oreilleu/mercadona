@@ -10,9 +10,9 @@ namespace Mercadona.Models
         public decimal Price { get; set; }
 
         public string Image { get; set; } = string.Empty;
-        
-        public Category? Category { get; set; } 
-        
+
+        public Category? Category { get; set; }
+
         public Promotion? Promotion { get; set; }
 
     }
