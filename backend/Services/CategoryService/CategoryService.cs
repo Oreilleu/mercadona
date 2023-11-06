@@ -104,6 +104,18 @@ namespace Mercadona.Services.CategoryService
                 if (category.Name == "Autre")
                     throw new Exception("Impossible de supprimer la catégorie 'Autre'");
 
+                var otherCategory = _context.Categories.FirstOrDefault(c => c.Name == "Autre");
+
+                if (otherCategory is null)
+                    throw new Exception("Category 'Autre' not found");
+
+                var productsToMove = _context.Products.Where(p => p.CategoryId == id).ToList();
+
+                foreach (var product in productsToMove)
+                {
+                    product.CategoryId = otherCategory.Id;
+                }
+
                 _context.Categories.Remove(category);
 
                 await _context.SaveChangesAsync();

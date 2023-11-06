@@ -1,5 +1,4 @@
 import { Category, Product } from '@/utils/types';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 
@@ -13,9 +12,9 @@ type ModalHandleProps = {
 export default function ModalHandle({ showModal, setShowModal, products, categories }: ModalHandleProps) {
   const [formType, setFormType] = useState<'add' | 'edit'>('edit');
   const [selectedIdCategory, setSelectedIdCategory] = useState<number | undefined>(undefined);
-  const [newCategory, setNewCategory] = useState<Category | undefined>();
-
-  const router = useRouter();
+  const [updateCategory, setUpdateCategory] = useState<Category | undefined>();
+  const [newCategory, setNewCategory] = useState<string>('');
+  const [error, setError] = useState<string>('');
 
   const handleAddClick = () => {
     setFormType('add');
@@ -55,6 +54,57 @@ export default function ModalHandle({ showModal, setShowModal, products, categor
     }
   };
 
+  const deleteCategory = async (id: number) => {
+    const token = document.cookie.split('=')[1];
+
+    if (!token) {
+      console.error('Vous devez être connecté pour modifier une catégorie');
+    }
+
+    try {
+      const response = await fetch(`https://localhost:7208/api/Category/${id}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      });
+      if (response.ok) {
+        console.log('La catégorie a bien été supprimée');
+        window.location.reload();
+      } else {
+        console.error('Les données demandées ne sont pas disponibles.');
+      }
+    } catch (error) {
+      console.error("Une erreur s'est produite lors de la suppression du produit :", error);
+    }
+  };
+
+  const addCategory = async (name: string) => {
+    const token = document.cookie.split('=')[1];
+
+    if (!token) {
+      console.error('Vous devez être connecté pour modifier une catégorie');
+    }
+
+    if (!name) {
+      setError('Veuillez renseigner un nom de catégorie');
+      return;
+    }
+
+    try {
+      const response = await fetch('https://localhost:7208/api/Category', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ name }),
+      });
+
+      if (response.ok) {
+        console.log('La catégorie a bien été ajoutée');
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error("Une erreur s'est produite lors de l'ajout de la catégorie :", error);
+    }
+  };
+
   return (
     <>
       <Modal show={showModal} onHide={handleClose} className="container-modal">
@@ -85,18 +135,18 @@ export default function ModalHandle({ showModal, setShowModal, products, categor
                             <input
                               type="text"
                               onChange={(e) =>
-                                setNewCategory({ id: category.id, name: e.target.value, products: category.products })
+                                setUpdateCategory({ id: category.id, name: e.target.value, products: category.products })
                               }
                               disabled={!(selectedIdCategory === category.id)}
                             />
-                            <Button type="submit" onClick={() => newCategory && modifyCategory(newCategory)}>
+                            <Button type="submit" onClick={() => updateCategory && modifyCategory(updateCategory)}>
                               Modifier
                             </Button>
                             <p
                               className="cross"
                               onClick={() => {
                                 setSelectedIdCategory(undefined);
-                                setNewCategory(undefined);
+                                setUpdateCategory(undefined);
                               }}
                             >
                               &times;
@@ -111,7 +161,7 @@ export default function ModalHandle({ showModal, setShowModal, products, categor
                               Modifier
                             </Button>{' '}
                             -{' '}
-                            <Button className="button-delete" size="sm">
+                            <Button className="button-delete" size="sm" onClick={() => deleteCategory(category.id)}>
                               Supprimer
                             </Button>
                           </>
@@ -123,14 +173,15 @@ export default function ModalHandle({ showModal, setShowModal, products, categor
               })}
             </ul>
           )}
-          {formType === 'add' && <div>Formulaire pour ajouter une catégorie</div>}
+          {formType === 'add' && (
+            <div className="container-input-add-category">
+              {error && <p className="error">{error}</p>}
+              <label>Nom de la catégorie : </label>
+              <input type="text" onChange={(e) => setNewCategory(e.target.value)} />
+              <Button onClick={() => addCategory(newCategory)}>Créer</Button>
+            </div>
+          )}
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary">Save Changes</Button>
-        </Modal.Footer>
       </Modal>
     </>
   );
