@@ -94,15 +94,17 @@ namespace backend.Migrations
                     b.Property<int>("DiscountPercentage")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("EndingDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<string>("EndingDate")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("StartingDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<string>("StartingDate")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

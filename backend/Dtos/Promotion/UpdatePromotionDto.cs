@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace Mercadona.Dtos.PromotionDto
@@ -6,8 +7,8 @@ namespace Mercadona.Dtos.PromotionDto
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        public DateTime StartingDate { get; set; } 
-        public DateTime EndingDate { get; set; } 
-        public int DiscountPercentage { get; set; } 
+        public string StartingDate { get; set; } = string.Empty;
+        public string EndingDate { get; set; } = string.Empty;
+        public int DiscountPercentage { get; set; }
     }
 }

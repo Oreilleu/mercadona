@@ -8,7 +8,7 @@ namespace Mercadona.Services.PromotionService
     {
         Task<ServiceResponse<List<GetPromotionDto>>> GetAllPromotion();
         Task<ServiceResponse<GetPromotionByIdDto>> GetPromotionById(int id);
-        Task<ServiceResponse<List<GetPromotionDto>>> AddPromotion(AddPromotionDto newProduct);
+        Task<ServiceResponse<List<GetPromotionDto>>> AddPromotion(AddPromotionDto newPromotion);
         Task<ServiceResponse<GetPromotionDto>> UpdatePromotion(UpdatePromotionDto updatedProduct);
         Task<ServiceResponse<List<GetPromotionDto>>> DeletePromotion(int id);
 

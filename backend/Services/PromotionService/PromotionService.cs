@@ -29,13 +29,13 @@ namespace Mercadoa.Services.PromotionService
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<GetPromotionDto>>> AddPromotion(AddPromotionDto newProduct)
+        public async Task<ServiceResponse<List<GetPromotionDto>>> AddPromotion(AddPromotionDto newPromotion)
         {
             var serviceResponse = new ServiceResponse<List<GetPromotionDto>>();
 
             try
             {
-                var promotion = _mapper.Map<Promotion>(newProduct);
+                var promotion = _mapper.Map<Promotion>(newPromotion);
                 _context.Promotions.Add(promotion);
                 await _context.SaveChangesAsync();
 
@@ -63,7 +63,7 @@ namespace Mercadoa.Services.PromotionService
             {
                 var promotion = await _context.Promotions.FindAsync(updatedProduct.Id);
 
-                if(promotion is null)
+                if (promotion is null)
                     throw new Exception($"Promotion with id {updatedProduct.Id} not found");
 
                 promotion.Name = updatedProduct.Name;
@@ -96,7 +96,7 @@ namespace Mercadoa.Services.PromotionService
             {
                 var promotion = _context.Promotions.Find(id);
 
-                if(promotion is null)
+                if (promotion is null)
                     throw new Exception($"Promotion with id {id} not found");
 
                 _context.Promotions.Remove(promotion);

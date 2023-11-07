@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace backend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231106183543_Initial")]
+    [Migration("20231107175639_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -97,15 +97,17 @@ namespace backend.Migrations
                     b.Property<int>("DiscountPercentage")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("EndingDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<string>("EndingDate")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("StartingDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<string>("StartingDate")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

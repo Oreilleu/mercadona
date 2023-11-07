@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -33,8 +32,8 @@ namespace backend.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    StartingDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    EndingDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    StartingDate = table.Column<string>(type: "text", nullable: false),
+                    EndingDate = table.Column<string>(type: "text", nullable: false),
                     DiscountPercentage = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>

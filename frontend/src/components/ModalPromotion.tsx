@@ -1,4 +1,5 @@
-import { Category, Product, Promotion } from '@/utils/types';
+import { postData } from '@/utils/services';
+import { Category, Product, Promotion, Response } from '@/utils/types';
 import { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 
@@ -11,8 +12,8 @@ type ModalHandleProps = {
 
 export default function ModalPromotion({ showModalPromotion, setShowModalPromotion, promotions }: ModalHandleProps) {
   const [formType, setFormType] = useState<'add' | 'edit'>('edit');
-  const [selectedIdCategory, setSelectedIdCategory] = useState<number | undefined>(undefined);
-  const [updateCategory, setUpdateCategory] = useState<Category | undefined>();
+  // const [selectedIdCategory, setSelectedIdCategory] = useState<number | undefined>(undefined);
+  // const [updateCategory, setUpdateCategory] = useState<Category | undefined>();
   const [newPromotion, setNewPromotion] = useState<Promotion>({
     name: '',
     startingDate: '',
@@ -87,12 +88,6 @@ export default function ModalPromotion({ showModalPromotion, setShowModalPromoti
   };
 
   const addPromotion = async (newPromotion: Promotion) => {
-    const token = document.cookie.split('=')[1];
-
-    if (!token) {
-      console.error('Vous devez être connecté pour modifier une promotion');
-    }
-
     if (!newPromotion.name || !newPromotion.startingDate || !newPromotion.endingDate || !newPromotion.discountPercentage) {
       setError('Veuillez remplir tous les champs');
       return;
@@ -103,24 +98,36 @@ export default function ModalPromotion({ showModalPromotion, setShowModalPromoti
       return;
     }
 
-    console.log('newPromotion', newPromotion);
+    const data: Response | string = await postData('https://localhost:7208/api/PromotionControllers', newPromotion);
 
-    try {
-      const response = await fetch('https://localhost:7208/api/PromotionControllers', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(newPromotion),
-      });
-
-      console.log(await response.json());
-
-      if (response.ok) {
-        console.log('La promotion a bien été ajoutée');
-        // window.location.reload();
-      }
-    } catch (error) {
-      console.error("Une erreur s'est produite lors de l'ajout de la promotion :", error);
+    if (typeof data === 'string') {
+      setError(data);
+      return;
     }
+
+    if (data.success) {
+      console.log('La promotion a bien été ajoutée');
+      window.location.reload();
+    } else {
+      setError(data.message);
+    }
+
+    // try {
+    //   const response = await fetch('https://localhost:7208/api/PromotionControllers', {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    //     body: JSON.stringify(newPromotion),
+    //   });
+
+    //   console.log(await response.json());
+
+    //   if (response.ok) {
+    //     console.log('La promotion a bien été ajoutée');
+    //     // window.location.reload();
+    //   }
+    // } catch (error) {
+    //   console.error("Une erreur s'est produite lors de l'ajout de la promotion :", error);
+    // }
   };
 
   return (
@@ -193,7 +200,7 @@ export default function ModalPromotion({ showModalPromotion, setShowModalPromoti
           )} */}
           {formType === 'add' && (
             <div className="container-input-add-promotion">
-              {error && <p className="error">{error}</p>}
+              {error && <p className="text-danger">{error}</p>}
               <label>Nom de la Promotion : </label>
               <input type="text" onChange={(e) => setNewPromotion({ ...newPromotion, name: e.target.value })} />
               <label>Date de début : </label>
