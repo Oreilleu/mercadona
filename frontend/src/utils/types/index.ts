@@ -5,10 +5,10 @@ export type Category = {
 };
 
 export type Promotion = {
-  id: number;
+  id?: number;
   name: string;
-  startingDate: Date;
-  endingDate: Date;
+  startingDate: string;
+  endingDate: string;
   discountPercentage: number;
 };
 
@@ -21,3 +21,9 @@ export type Product = {
   category: Category;
   promotion: Promotion;
 };
+
+export type Response = {
+  data: any[];
+  success: boolean;
+  message: string
+}

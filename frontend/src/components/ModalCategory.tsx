@@ -3,13 +3,13 @@ import { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 
 type ModalHandleProps = {
-  showModal: boolean;
-  setShowModal: (value: boolean) => void;
+  showModalCategory: boolean;
+  setShowModalCategory: (value: boolean) => void;
   products: Product[] | undefined;
   categories: Category[] | undefined;
 };
 
-export default function ModalHandle({ showModal, setShowModal, products, categories }: ModalHandleProps) {
+export default function ModalCategory({ showModalCategory, setShowModalCategory, products, categories }: ModalHandleProps) {
   const [formType, setFormType] = useState<'add' | 'edit'>('edit');
   const [selectedIdCategory, setSelectedIdCategory] = useState<number | undefined>(undefined);
   const [updateCategory, setUpdateCategory] = useState<Category | undefined>();
@@ -18,17 +18,20 @@ export default function ModalHandle({ showModal, setShowModal, products, categor
 
   const handleAddClick = () => {
     setFormType('add');
-    setShowModal(true);
+    setShowModalCategory(true);
+    setError('');
   };
 
   const handleEditClick = () => {
     setFormType('edit');
-    setShowModal(true);
+    setShowModalCategory(true);
+    setError('');
   };
 
   const handleClose = () => {
     setFormType('edit');
-    setShowModal(false);
+    setShowModalCategory(false);
+    setError('');
   };
 
   const modifyCategory = async (newCategory: Category) => {
@@ -107,7 +110,7 @@ export default function ModalHandle({ showModal, setShowModal, products, categor
 
   return (
     <>
-      <Modal show={showModal} onHide={handleClose} className="container-modal">
+      <Modal show={showModalCategory} onHide={handleClose} className="container-modal">
         <Modal.Header closeButton>
           <Modal.Title>Gestion catégorie</Modal.Title>
           <div className="container-button">

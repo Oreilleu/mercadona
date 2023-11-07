@@ -22,11 +22,15 @@
     }
   }
 
-  .container-input-add-category {
+  .container-input-add-category, .container-input-add-promotion {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 10px;
+
+    .error {
+      @extend .text-danger;
+    }
   }
 }
