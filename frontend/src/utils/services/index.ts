@@ -55,3 +55,87 @@ export const getCategory = async () => {
     return data.message;
   }
 };
+
+export const postData = async (url: string, body: any) => {
+  const token = checkToken();
+
+  if(!token){
+    return "Vous devez être connecté pour créer des données" as string;
+  }
+
+  try {
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify(body),
+      });
+
+      if(!response.ok) {
+        throw new Error('Erreur lors de la création des données');
+      }
+
+      const data: Response = await response.json();
+      return data;
+  } catch (error) {
+    return "Erreur lors de la création des données" as string;
+  }
+}
+
+export const putData = async (url: string, body: any) => {
+  const token = checkToken();
+
+  if(!token){
+    return "Vous devez être connecté pour modifier des données" as string;
+  }
+
+  try {
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify(body),
+    });
+
+    if(!response.ok) {
+      throw new Error('Erreur lors de la modification des données');
+    }
+
+    const data: Response = await response.json();
+    return data;
+
+  } catch (error) {
+    return "Erreur lors de la modification des données" as string;
+  }
+
+
+}
+
+export const deleteData = async (url: string, id: number) => {
+  const token = checkToken();
+
+  if(!token){
+    return "Vous devez être connecté pour supprimer des données" as string;
+  }
+
+  try {
+    const response = await fetch(`${url}/${id}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    });
+
+    if(!response.ok) {
+      throw new Error('Erreur lors de la suppression des données');
+    }
+
+    const data: Response = await response.json();
+    return data;
+
+  } catch (error) {
+    return "Erreur lors de la suppression des données" as string;
+  }
+}
+
+export const checkToken = () => {
+  const token = document.cookie.split('=')[1];
+
+  return token;
+}

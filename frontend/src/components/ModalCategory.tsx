@@ -1,4 +1,5 @@
-import { Category, Product } from '@/utils/types';
+import { deleteData, postData, putData } from '@/utils/services';
+import { Category, Product, Response } from '@/utils/types';
 import { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 
@@ -34,77 +35,69 @@ export default function ModalCategory({ showModalCategory, setShowModalCategory,
     setError('');
   };
 
-  const modifyCategory = async (newCategory: Category) => {
-    const token = document.cookie.split('=')[1];
-
-    if (!token) {
-      console.error('Vous devez être connecté pour modifier une catégorie');
+  const modifyCategory = async (newCategory: Category | undefined) => {
+    if (!newCategory?.name) {
+      setError('Veuillez renseigner un nom de catégorie');
+      return;
     }
 
-    try {
-      const response = await fetch('https://localhost:7208/api/Category', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ id: newCategory.id, name: newCategory.name }),
-      });
+    const data: Response | string = await putData('https://localhost:7208/api/Category', {
+      id: newCategory.id,
+      name: newCategory.name,
+    });
 
-      if (response.ok) {
-        console.log('La catégorie a bien été modifiée');
-        window.location.reload();
-      }
-    } catch (error) {
-      console.error("Une erreur s'est produite lors de la modification de la catégorie :", error);
+    if (typeof data === 'string') {
+      setError(data);
+      return;
+    }
+
+    if (data.success) {
+      console.log('La catégorie a bien été modifier');
+      window.location.reload();
+    } else {
+      setError(data.message);
     }
   };
 
   const deleteCategory = async (id: number) => {
-    const token = document.cookie.split('=')[1];
-
-    if (!token) {
-      console.error('Vous devez être connecté pour modifier une catégorie');
+    if (!id) {
+      setError('Erreur lors de la suppression de la catégorie');
+      return;
     }
 
-    try {
-      const response = await fetch(`https://localhost:7208/api/Category/${id}`, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      });
-      if (response.ok) {
-        console.log('La catégorie a bien été supprimée');
-        window.location.reload();
-      } else {
-        console.error('Les données demandées ne sont pas disponibles.');
-      }
-    } catch (error) {
-      console.error("Une erreur s'est produite lors de la suppression du produit :", error);
+    const data: Response | string = await deleteData('https://localhost:7208/api/Category', id);
+
+    if (typeof data === 'string') {
+      setError(data);
+      return;
+    }
+
+    if (data.success) {
+      console.log('La catégorie a bien été supprimer');
+      window.location.reload();
+    } else {
+      setError(data.message);
     }
   };
 
   const addCategory = async (name: string) => {
-    const token = document.cookie.split('=')[1];
-
-    if (!token) {
-      console.error('Vous devez être connecté pour modifier une catégorie');
-    }
-
     if (!name) {
       setError('Veuillez renseigner un nom de catégorie');
       return;
     }
 
-    try {
-      const response = await fetch('https://localhost:7208/api/Category', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ name }),
-      });
+    const data: Response | string = await postData('https://localhost:7208/api/Category', { name });
 
-      if (response.ok) {
-        console.log('La catégorie a bien été ajoutée');
-        window.location.reload();
-      }
-    } catch (error) {
-      console.error("Une erreur s'est produite lors de l'ajout de la catégorie :", error);
+    if (typeof data === 'string') {
+      setError(data);
+      return;
+    }
+
+    if (data.success) {
+      console.log('La catégorie a bien été ajoutée');
+      window.location.reload();
+    } else {
+      setError(data.message);
     }
   };
 
@@ -125,6 +118,7 @@ export default function ModalCategory({ showModalCategory, setShowModalCategory,
         <Modal.Body>
           {formType === 'edit' && (
             <ul className="list-unstyled">
+              {error && <p className="text-danger">{error}</p>}
               {categories?.map((category: Category) => {
                 return (
                   <li key={category.id} className="mb-3">
@@ -142,7 +136,7 @@ export default function ModalCategory({ showModalCategory, setShowModalCategory,
                               }
                               disabled={!(selectedIdCategory === category.id)}
                             />
-                            <Button type="submit" onClick={() => updateCategory && modifyCategory(updateCategory)}>
+                            <Button type="submit" onClick={() => modifyCategory(updateCategory)}>
                               Modifier
                             </Button>
                             <p
@@ -178,7 +172,7 @@ export default function ModalCategory({ showModalCategory, setShowModalCategory,
           )}
           {formType === 'add' && (
             <div className="container-input-add-category">
-              {error && <p className="error">{error}</p>}
+              {error && <p className="text-center text-danger">{error}</p>}
               <label>Nom de la catégorie : </label>
               <input type="text" onChange={(e) => setNewCategory(e.target.value)} />
               <Button onClick={() => addCategory(newCategory)}>Créer</Button>
