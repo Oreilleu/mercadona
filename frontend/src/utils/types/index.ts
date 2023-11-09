@@ -13,13 +13,22 @@ export type Promotion = {
 };
 
 export type Product = {
-  id: number;
+  id?: number;
   name: string;
   price: number;
   description: string;
   image: string;
   category: Category;
   promotion: Promotion;
+};
+
+export type CreateProduct = {
+  name: string;
+  price: number;
+  description: string;
+  imageFile: File;
+  categoryId?: number;
+  promotionId?: number;
 };
 
 export type Response = {

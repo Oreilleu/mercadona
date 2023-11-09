@@ -17,7 +17,7 @@ namespace Mercadona.Controllers
             _promotionService = promotionService;
         }
 
-        // [AllowAnonymous]
+        [AllowAnonymous]
         [HttpGet("GetAll")]
         public async Task<ActionResult<ServiceResponse<List<GetPromotionDto>>>> Get()
         {
@@ -31,17 +31,17 @@ namespace Mercadona.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ServiceResponse<List<GetPromotionDto>>>> AddProduct(AddPromotionDto newPromotion)
+        public async Task<ActionResult<ServiceResponse<List<GetPromotionDto>>>> AddPromotion(AddPromotionDto newPromotion)
         {
             return Ok(await _promotionService.AddPromotion(newPromotion));
         }
 
         [HttpPut]
-        public async Task<ActionResult<ServiceResponse<List<GetPromotionDto>>>> UpdateProduct(UpdatePromotionDto updatedPromotion)
+        public async Task<ActionResult<ServiceResponse<List<GetPromotionDto>>>> UpdatePromotion(UpdatePromotionDto updatedPromotion)
         {
             var response = await _promotionService.UpdatePromotion(updatedPromotion);
 
-            if(response.Data == null)
+            if (response.Data == null)
                 return NotFound(response);
 
             return Ok(response);
@@ -49,13 +49,13 @@ namespace Mercadona.Controllers
 
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> DeleteProduct(int id)
+        public async Task<ActionResult<ServiceResponse<List<GetProductDto>>>> DeletePromotion(int id)
         {
             var response = await _promotionService.DeletePromotion(id);
 
-            if(response.Data == null)
+            if (response.Data == null)
                 return NotFound(response);
-            
+
             return Ok(response);
         }
     }

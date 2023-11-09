@@ -1,4 +1,4 @@
-import { Category, Product, Response } from "../types";
+import { Category, Product, Promotion, Response } from "../types";
 
 export const filterproducts = (productsData: Product[], selectedCategory: string, showPromotion: boolean) => {
   let filteredProducts = [...productsData];
@@ -56,6 +56,19 @@ export const getCategory = async () => {
   }
 };
 
+export const getPromotions = async () => {
+  const data: Response | string = await getData('https://localhost:7208/api/PromotionControllers/GetAll');
+  if (typeof data === 'string') {
+    return data;
+  }
+
+  if (data.success) {
+    return data.data as Promotion[];
+  } else {
+    return data.message;
+  }
+};
+
 export const postData = async (url: string, body: any) => {
   const token = checkToken();
 
@@ -68,6 +81,32 @@ export const postData = async (url: string, body: any) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify(body),
+      });
+
+      if(!response.ok) {
+        throw new Error('Erreur lors de la création des données');
+      }
+
+      const data: Response = await response.json();
+      return data;
+  } catch (error) {
+    return "Erreur lors de la création des données" as string;
+  }
+}
+
+export const postFormData = async (url: string, body: FormData) => {
+  const token = checkToken();
+
+  if(!token){
+    return "Vous devez être connecté pour créer des données" as string;
+  }
+
+  try {
+    const boundary = `----${new Date().getTime().toString()}`;
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': `multipart/form-data; boundary=${boundary}`, },
+        body: body,
       });
 
       if(!response.ok) {

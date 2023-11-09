@@ -13,13 +13,33 @@
 
   .container-input {
     display: flex;
-    align-items: center;
     gap: 20px;
+    flex-direction: column;
+    position: relative;
 
-    .cross {
+    .container-item {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+    }
+
+    .cross-category {
       font-size: 35px;
       cursor: pointer;
+      position: absolute;
+      top: -20px;
+      right: 0px;
     }
+
+    .cross-promotion {
+      font-size: 35px;
+      cursor: pointer;
+      position: absolute;
+      top: -40px;
+      right: 0;
+    }
+
   }
 
   .container-input-add-category, .container-input-add-promotion {
@@ -28,5 +48,16 @@
     justify-content: center;
     align-items: center;
     gap: 10px;
+  }
+
+  .container-form-product {
+    display: flex;
+    flex-direction: column;
+
+    .container-input-product {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
   }
 }

@@ -1,16 +1,15 @@
 import { deleteData, postData, putData } from '@/utils/services';
-import { Category, Product, Response } from '@/utils/types';
+import { Category, Response } from '@/utils/types';
 import { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 
 type ModalHandleProps = {
   showModalCategory: boolean;
   setShowModalCategory: (value: boolean) => void;
-  products: Product[] | undefined;
   categories: Category[] | undefined;
 };
 
-export default function ModalCategory({ showModalCategory, setShowModalCategory, products, categories }: ModalHandleProps) {
+export default function ModalCategory({ showModalCategory, setShowModalCategory, categories }: ModalHandleProps) {
   const [formType, setFormType] = useState<'add' | 'edit'>('edit');
   const [selectedIdCategory, setSelectedIdCategory] = useState<number | undefined>(undefined);
   const [updateCategory, setUpdateCategory] = useState<Category | undefined>();
@@ -129,25 +128,29 @@ export default function ModalCategory({ showModalCategory, setShowModalCategory,
                       <>
                         {selectedIdCategory === category.id && (
                           <div className="container-input">
-                            <input
-                              type="text"
-                              onChange={(e) =>
-                                setUpdateCategory({ id: category.id, name: e.target.value, products: category.products })
-                              }
-                              disabled={!(selectedIdCategory === category.id)}
-                            />
-                            <Button type="submit" onClick={() => modifyCategory(updateCategory)}>
-                              Modifier
-                            </Button>
-                            <p
-                              className="cross"
-                              onClick={() => {
-                                setSelectedIdCategory(undefined);
-                                setUpdateCategory(undefined);
-                              }}
-                            >
-                              &times;
-                            </p>
+                            <div className="container-item">
+                              <label htmlFor="update-name-category">Nom</label>
+                              <input
+                                type="text"
+                                onChange={(e) =>
+                                  setUpdateCategory({ id: category.id, name: e.target.value, products: category.products })
+                                }
+                                disabled={!(selectedIdCategory === category.id)}
+                                id="update-name-category"
+                              />
+                              <Button type="submit" onClick={() => modifyCategory(updateCategory)}>
+                                Modifier
+                              </Button>
+                              <p
+                                className="cross-category"
+                                onClick={() => {
+                                  setSelectedIdCategory(undefined);
+                                  setUpdateCategory(undefined);
+                                }}
+                              >
+                                &times;
+                              </p>
+                            </div>
                           </div>
                         )}
 
