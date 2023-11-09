@@ -17,7 +17,7 @@ export type Product = {
   name: string;
   price: number;
   description: string;
-  image: string;
+  imageUrl: string;
   category: Category;
   promotion: Promotion;
 };
@@ -26,7 +26,6 @@ export type CreateProduct = {
   name: string;
   price: number;
   description: string;
-  imageFile: File;
   categoryId?: number;
   promotionId?: number;
 };

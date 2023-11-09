@@ -40,7 +40,16 @@ namespace Mercadona.Services.ProductService
                 var category = await _context.Categories.FindAsync(newProduct.CategoryId);
 
                 if (category is null)
-                    throw new Exception($"Category with id {newProduct.CategoryId} not found");
+                {
+                    category = await _context.Categories.SingleOrDefaultAsync(c => c.Name == "Autre");
+
+                    if (category is null)
+                    {
+                        category = new Category { Name = "Autre" };
+                        _context.Categories.Add(category);
+                        await _context.SaveChangesAsync();
+                    }
+                }
 
                 var product = _mapper.Map<Product>(newProduct);
                 product.Category = category;
@@ -74,8 +83,18 @@ namespace Mercadona.Services.ProductService
                 if (product is null)
                     throw new Exception($"Product with id {updatedProduct.Id} not found");
 
+
                 if (category is null)
-                    throw new Exception($"Category with id {updatedProduct.CategoryId} not found");
+                {
+                    category = await _context.Categories.SingleOrDefaultAsync(c => c.Name == "Autre");
+
+                    if (category is null)
+                    {
+                        category = new Category { Name = "Autre" };
+                        _context.Categories.Add(category);
+                        await _context.SaveChangesAsync();
+                    }
+                }
 
                 product.Name = updatedProduct.Name;
                 product.Description = updatedProduct.Description;

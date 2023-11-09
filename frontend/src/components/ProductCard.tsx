@@ -1,4 +1,4 @@
-import { Category, Promotion } from '@/app/page';
+import { Category, Promotion } from '@/utils/types';
 
 type ProductCardProps = {
   name: string;
@@ -17,7 +17,11 @@ export default function ProductCard({ name, price, description, image, category,
       </div>
       <div className="content">
         <h3>{name}</h3>
-        <p className={promotion ? 'price-promotion' : 'price'}>{price} €</p>
+        <p>Catégorie : {category.name}</p>
+        {promotion && <p className="promotion">Promotion : {promotion.name}</p>}
+        <p className={promotion ? 'price-promotion' : 'price'}>
+          {promotion ? price - (price / promotion.discountPercentage) * 100 : price} €
+        </p>
         <p className="description">{description}</p>
       </div>
     </article>

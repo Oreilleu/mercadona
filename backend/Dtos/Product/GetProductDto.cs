@@ -11,7 +11,7 @@ namespace Mercadona.Dtos.ProductDto
 
         public decimal Price { get; set; }
 
-        public string Image { get; set; } = string.Empty;
+        public string ImageUrl { get; set; } = string.Empty;
 
         public GetCategoryForProductDto? Category { get; set; }
 

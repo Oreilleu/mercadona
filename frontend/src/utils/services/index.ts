@@ -102,10 +102,9 @@ export const postFormData = async (url: string, body: FormData) => {
   }
 
   try {
-    const boundary = `----${new Date().getTime().toString()}`;
     const response = await fetch(url, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${token}`, 'Content-Type': `multipart/form-data; boundary=${boundary}`, },
+        headers: { Authorization: `Bearer ${token}` },
         body: body,
       });
 

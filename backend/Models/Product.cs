@@ -11,7 +11,7 @@ namespace Mercadona.Models
 
         public decimal Price { get; set; }
 
-        public string Image { get; set; } = string.Empty;
+        public string ImageUrl { get; set; } = string.Empty;
 
         [ForeignKey("Category")]
         public int CategoryId { get; set; }

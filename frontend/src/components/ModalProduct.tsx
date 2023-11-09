@@ -1,4 +1,4 @@
-import { postFormData } from '@/utils/services';
+import { postData, postFormData } from '@/utils/services';
 import { Category, CreateProduct, Promotion, Response } from '@/utils/types';
 import { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
@@ -15,11 +15,10 @@ export default function ModalProduct({ showModalProduct, setShowModalProduct, ca
     name: '',
     price: 0,
     description: '',
-    imageFile: {} as File,
     categoryId: undefined,
     promotionId: undefined,
   });
-  // const [imageFile, setImageFile] = useState<File>();
+  const [imageFile, setImageFile] = useState<File>();
   const [error, setError] = useState<string>('');
 
   const handleClose = () => {
@@ -28,31 +27,17 @@ export default function ModalProduct({ showModalProduct, setShowModalProduct, ca
   };
 
   const addProduct = async (newProduct: CreateProduct) => {
-    if (!product.name || !product.price || !product.description || !product.imageFile) {
+    if (!product.name || !product.price || !product.description) {
       setError('Veuillez remplir tous les champs');
       return;
     }
 
-    if (product.imageFile.type !== 'image/jpeg') {
-      setError('Veuillez selectionner une image de type jpeg');
+    if (!imageFile) {
+      setError('Veuillez selectionner une image');
       return;
     }
 
-    if (product.imageFile.size > 16384) {
-      setError('Image trop grosse');
-    }
-
-    console.log(product.imageFile);
-
-    const formData = new FormData();
-    formData.append('name', product.name);
-    formData.append('price', product.price.toString());
-    formData.append('description', product.description);
-    formData.append('imageFile', product.imageFile);
-    formData.append('categoryId', product.categoryId?.toString() || '');
-    formData.append('promotionId', product.promotionId?.toString() || '');
-
-    const data: Response | string = await postFormData('https://localhost:7208/api/ProductControllers', formData);
+    const data: Response | string = await postData('https://localhost:7208/api/ProductControllers', newProduct);
 
     if (typeof data === 'string') {
       setError(data);
@@ -61,7 +46,22 @@ export default function ModalProduct({ showModalProduct, setShowModalProduct, ca
 
     if (data.success) {
       console.log('Le produit a bien été ajoutée');
-      window.location.reload();
+      const formData = new FormData();
+      formData.append('imageFile', imageFile);
+      formData.append('idProduct', `${data.data[data.data.length - 1].id}`);
+
+      const dataImage: Response | string = await postFormData('https://localhost:7208/api/UploadImage', formData);
+      if (typeof dataImage === 'string') {
+        setError(dataImage);
+        return;
+      }
+
+      if (dataImage.success) {
+        console.log('Image ajoutée');
+        window.location.reload();
+      } else {
+        setError(dataImage.message);
+      }
     } else {
       setError(data.message);
     }
@@ -102,8 +102,7 @@ export default function ModalProduct({ showModalProduct, setShowModalProduct, ca
                     setError('Aucunne image selectioner');
                     return;
                   }
-                  setProduct({ ...product, imageFile: e.target.files[0] });
-                  // setImageFile(e.target.files[0]);
+                  setImageFile(e.target.files[0]);
                 }}
               />
             </div>
