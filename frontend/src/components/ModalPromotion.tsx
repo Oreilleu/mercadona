@@ -75,25 +75,23 @@ export default function ModalPromotion({ showModalPromotion, setShowModalPromoti
   };
 
   const deletePromotion = async (id: number) => {
-    const token = document.cookie.split('=')[1];
-
-    if (!token) {
-      console.error('Vous devez être connecté pour modifier une promotion');
+    if (!id) {
+      setError('Erreur lors de la suppression de la catégorie');
+      return;
     }
 
-    try {
-      const response = await fetch(`https://localhost:7208/api/PromotionControllers/${id}`, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      });
-      if (response.ok) {
-        console.log('La promotion a bien été supprimée');
-        window.location.reload();
-      } else {
-        console.error('Les données demandées ne sont pas disponibles.');
-      }
-    } catch (error) {
-      console.error("Une erreur s'est produite lors de la suppression de la promotion :", error);
+    const data: Response | string = await postData('https://localhost:7208/api/PromotionControllers', id);
+
+    if (typeof data === 'string') {
+      setError(data);
+      return;
+    }
+
+    if (data.success) {
+      console.log('La catégorie a bien été supprimer');
+      window.location.reload();
+    } else {
+      setError(data.message);
     }
   };
 
@@ -193,11 +191,14 @@ export default function ModalPromotion({ showModalPromotion, setShowModalPromoti
                             <div className="container-item">
                               <label htmlFor="update-discount-promotion">Remise</label>
                               <input
-                                type="text"
+                                type="number"
                                 disabled={!(selectedIdPromotion === promotion.id)}
-                                value={updatePromotion.discountPercentage}
+                                value={updatePromotion.discountPercentage || 0}
                                 onChange={(e) =>
-                                  setUpdatePromotion({ ...updatePromotion, discountPercentage: parseInt(e.target.value) })
+                                  setUpdatePromotion({
+                                    ...updatePromotion,
+                                    discountPercentage: parseInt(e.target.value || '0'),
+                                  })
                                 }
                                 id="update-discount-promotion"
                               />

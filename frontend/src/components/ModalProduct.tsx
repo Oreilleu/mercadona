@@ -27,13 +27,18 @@ export default function ModalProduct({ showModalProduct, setShowModalProduct, ca
   };
 
   const addProduct = async (newProduct: CreateProduct) => {
-    if (!product.name || !product.price || !product.description) {
+    if (!product.name || !product.price || !product.description || !imageFile) {
       setError('Veuillez remplir tous les champs');
       return;
     }
 
-    if (!imageFile) {
-      setError('Veuillez selectionner une image');
+    if (
+      imageFile.type !== 'image/png' &&
+      imageFile.type !== 'image/jpeg' &&
+      imageFile.type !== 'image/jpg' &&
+      imageFile.type !== 'image/webp'
+    ) {
+      setError('Veuillez sélectionner une image au format PNG, JPEG, JPG ou WEBP');
       return;
     }
 
@@ -46,6 +51,7 @@ export default function ModalProduct({ showModalProduct, setShowModalProduct, ca
 
     if (data.success) {
       console.log('Le produit a bien été ajoutée');
+
       const formData = new FormData();
       formData.append('imageFile', imageFile);
       formData.append('idProduct', `${data.data[data.data.length - 1].id}`);

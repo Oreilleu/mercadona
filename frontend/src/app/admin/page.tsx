@@ -131,12 +131,16 @@ export default function Admin() {
                   {filteredProducts?.map((product: Product, index: number) => (
                     <li key={`PRODUCT INDEX ${index} - PRODUCT ID ${product.id}`}>
                       <ProductCard
+                        categories={listCategories}
+                        promotions={listPromotions}
+                        id={product.id}
                         name={product.name}
                         price={product.price}
                         description={product.description}
                         image={product.imageUrl}
                         category={product.category}
                         promotion={product.promotion}
+                        adminPanel
                       />
                     </li>
                   ))}

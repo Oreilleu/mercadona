@@ -30,6 +30,16 @@ export type CreateProduct = {
   promotionId?: number;
 };
 
+export type UpdateProduct = {
+  id: number;
+  name: string;
+  price: number;
+  description: string;
+  categoryId?: number;
+  promotionId?: number;
+};
+
+
 export type Response = {
   data: any[];
   success: boolean;

@@ -51,8 +51,18 @@ namespace Mercadona.Services.ProductService
                     }
                 }
 
+
                 var product = _mapper.Map<Product>(newProduct);
+
+                var promotion = await _context.Promotions.FindAsync(newProduct.PromotionId);
+
+                if (promotion is null)
+                {
+                    product.Promotion = null;
+                }
+
                 product.Category = category;
+                product.Promotion = promotion;
 
                 _context.Products.Add(product);
                 await _context.SaveChangesAsync();
