@@ -48,6 +48,9 @@ export default function ModalPromotion({ showModalPromotion, setShowModalPromoti
   };
 
   const modifyPromotion = async (newPromotion: Promotion) => {
+    const startingDate = new Date(newPromotion.startingDate).toLocaleDateString();
+    const endingDate = new Date(newPromotion.endingDate).toLocaleDateString();
+
     if (!newPromotion.name || !newPromotion.startingDate || !newPromotion.endingDate || !newPromotion.discountPercentage) {
       setError('Veuillez remplir tous les champs');
       return;
@@ -55,6 +58,11 @@ export default function ModalPromotion({ showModalPromotion, setShowModalPromoti
 
     if (newPromotion.discountPercentage < 0 || newPromotion.discountPercentage > 80) {
       setError('La remise doit être comprise entre 0 et 80 %');
+      return;
+    }
+
+    if (startingDate > endingDate) {
+      setError('La date de début doit être inférieur à la date de fin');
       return;
     }
 
@@ -95,6 +103,9 @@ export default function ModalPromotion({ showModalPromotion, setShowModalPromoti
   };
 
   const addPromotion = async (newPromotion: Promotion) => {
+    const startingDate = new Date(newPromotion.startingDate).toLocaleDateString();
+    const endingDate = new Date(newPromotion.endingDate).toLocaleDateString();
+
     if (!newPromotion.name || !newPromotion.startingDate || !newPromotion.endingDate || !newPromotion.discountPercentage) {
       setError('Veuillez remplir tous les champs');
       return;
@@ -102,6 +113,11 @@ export default function ModalPromotion({ showModalPromotion, setShowModalPromoti
 
     if (newPromotion.discountPercentage < 0 || newPromotion.discountPercentage > 80) {
       setError('La remise doit être comprise entre 0 et 80 %');
+      return;
+    }
+
+    if (startingDate > endingDate) {
+      setError('La date de début doit être inférieur à la date de fin');
       return;
     }
 

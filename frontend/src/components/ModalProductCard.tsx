@@ -84,7 +84,6 @@ export default function ModalProductCard({
 
     if (data.success) {
       console.log('Le produit a bien été modifier');
-      console.log('imageFile', imageFile);
 
       if (!imageFile) {
         return window.location.reload();

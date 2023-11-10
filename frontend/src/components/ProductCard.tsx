@@ -29,6 +29,11 @@ export default function ProductCard({
   adminPanel = false,
 }: ProductCardProps) {
   const [manageButton, setManageButton] = useState<boolean>(false);
+  const actualDate = new Date().toLocaleDateString();
+  const startingDate = promotion && new Date(promotion.startingDate).toLocaleDateString();
+  const endingDate = promotion && new Date(promotion.endingDate).toLocaleDateString();
+
+  const isActivePromotion = actualDate >= String(startingDate) && actualDate <= String(endingDate);
 
   if (!id) return null;
 
@@ -63,10 +68,14 @@ export default function ProductCard({
         <div className="content">
           <h3>{name}</h3>
           <p>Catégorie : {category.name}</p>
-          {promotion && <p className="promotion">Promotion : {promotion.name}</p>}
-          <p className={promotion ? 'price-promotion' : 'price'}>
-            {promotion ? `${price - price * (promotion.discountPercentage / 100)} €` : `${price} €`}
-          </p>
+          {promotion && isActivePromotion ? (
+            <>
+              <p className="promotion">Promotion : {promotion.name}</p>
+              <p className="price-promotion">{price - price * (promotion.discountPercentage / 100)} €</p>
+            </>
+          ) : (
+            <p className="price">{price} €</p>
+          )}
           <p className="description">{description}</p>
         </div>
       </article>
