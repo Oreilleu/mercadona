@@ -23,12 +23,12 @@ namespace Mercadona.Data
             var response = new ServiceResponse<string>();
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username.ToLower().Equals(username.ToLower()));
 
-            if(user is null)
+            if (user is null)
             {
                 response.Success = false;
                 response.Message = "User not found.";
             }
-            else if(!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
+            else if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
             {
                 response.Success = false;
                 response.Message = "Wrong password.";
@@ -44,7 +44,7 @@ namespace Mercadona.Data
         public async Task<ServiceResponse<int>> Register(User user, string password)
         {
             var response = new ServiceResponse<int>();
-            if(await UserExists(user.Username))
+            if (await UserExists(user.Username))
             {
                 response.Success = false;
                 response.Message = "User already exists.";
@@ -70,8 +70,11 @@ namespace Mercadona.Data
             {
                 var user = await _context.Users.FirstOrDefaultAsync(p => p.Id == id);
 
-                if(user is null)
+                if (user is null)
                     throw new Exception($"User with id {id} not found");
+
+                if (user.IsInitialAccount == true)
+                    throw new Exception("Impossible de supprimer le compte initial");
 
                 _context.Users.Remove(user);
 
@@ -79,7 +82,7 @@ namespace Mercadona.Data
 
                 serviceResponse.Data = await _context.Users.Select(u => _mapper.Map<GetUserDto>(u)).ToListAsync();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 serviceResponse.Success = false;
                 serviceResponse.Message = ex.Message;
@@ -90,7 +93,7 @@ namespace Mercadona.Data
 
         public async Task<bool> UserExists(string username)
         {
-            if(await _context.Users.AnyAsync(u => u.Username.ToLower() == username.ToLower()))
+            if (await _context.Users.AnyAsync(u => u.Username.ToLower() == username.ToLower()))
             {
                 return true;
             }
@@ -99,7 +102,7 @@ namespace Mercadona.Data
 
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
-            using(var hmac = new System.Security.Cryptography.HMACSHA512())
+            using (var hmac = new System.Security.Cryptography.HMACSHA512())
             {
                 passwordSalt = hmac.Key;
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
@@ -108,7 +111,7 @@ namespace Mercadona.Data
 
         private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
-            using(var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
+            using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
             {
                 var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
                 return computedHash.SequenceEqual(passwordHash);
@@ -125,7 +128,7 @@ namespace Mercadona.Data
 
             var appSettingsToken = _configuration.GetSection("AppSettings:Token").Value;
 
-            if(appSettingsToken is null)
+            if (appSettingsToken is null)
             {
                 throw new Exception("AppSettings Token is null.");
             }

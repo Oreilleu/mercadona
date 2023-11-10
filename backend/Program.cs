@@ -78,6 +78,30 @@ using (var scope = app.Services.CreateScope())
         context.Categories.Add(new Category { Name = "Autre" });
         context.SaveChanges();
     }
+
+    if (!context.Users.Any())
+    {
+        var authRepository = services.GetRequiredService<IAuthRepository>();
+        var userService = services.GetRequiredService<IAuthRepository>();
+
+        var defaultUsername = "admin";
+        var defaultPassword = "password";
+        if (!await authRepository.UserExists(defaultUsername))
+        {
+            var newUser = new User { Username = defaultUsername, IsInitialAccount = true };
+            var registrationResult = await authRepository.Register(newUser, defaultPassword);
+
+            if (registrationResult.Success)
+            {
+                Console.WriteLine($"User created");
+            }
+            else
+            {
+                Console.WriteLine($"Failed to create user: {registrationResult.Message}");
+
+            }
+        }
+    }
 }
 
 // Configure the HTTP request pipeline.
