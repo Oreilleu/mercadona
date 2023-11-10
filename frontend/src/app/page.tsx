@@ -2,18 +2,16 @@
 import Banner from '@/components/Banner';
 import Layout from '@/components/Layout';
 import ProductCard from '@/components/ProductCard';
-import { filterproducts, getCategory, getProducts } from '@/utils/services';
-import { Category, Product } from '@/utils/types';
+import { filterproducts, getCategory, getProducts, getPromotions } from '@/utils/services';
+import { Category, Product, Promotion } from '@/utils/types';
 import { useEffect, useState } from 'react';
 import { Button, Container } from 'react-bootstrap';
-
-// TODO : Ajouter une image à la base de données
-// TODO : Filtrer en fonction de la catégorie et du boolean promotion
 
 export default function Home() {
   const [showPromotion, setShowPromotion] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [listCategories, setListCategories] = useState<Category[]>([]);
+  const [listPromotions, setListPromotions] = useState<Promotion[]>([]);
   const [productsData, setProductsData] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [error, setError] = useState<string>('');
@@ -45,8 +43,19 @@ export default function Home() {
       }
     };
 
+    const fetchPromotions = async () => {
+      const promotions: Promotion[] | string = await getPromotions();
+
+      if (typeof promotions == 'string') {
+        setError(promotions);
+      } else {
+        setListPromotions(promotions);
+      }
+    };
+
     fetchProducts();
     fetchCategory();
+    fetchPromotions();
   }, []);
 
   return (
@@ -86,9 +95,11 @@ export default function Home() {
                         name={product.name}
                         price={product.price}
                         description={product.description}
-                        image={product.image}
+                        image={product.imageUrl}
                         category={product.category}
                         promotion={product.promotion}
+                        categories={listCategories}
+                        promotions={listPromotions}
                       />
                     </li>
                   ))}

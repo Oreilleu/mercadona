@@ -8,11 +8,10 @@ type ModalProductCardProps = {
   setShowModalProductCard: (value: boolean) => void;
   categories: Category[];
   promotions: Promotion[];
-  productId: number;
+  productId?: number;
   productName: string;
   productPrice: number;
   productDescription: string;
-  productImage: string;
   productCategory: Category;
   productPromotion: Promotion | null;
 };
@@ -26,10 +25,11 @@ export default function ModalProductCard({
   productName,
   productDescription,
   productPrice,
-  productImage,
   productCategory,
   productPromotion,
 }: ModalProductCardProps) {
+  if (!productId) return null;
+
   const [handleTab, setHandleTab] = useState<'put' | 'delete'>('put');
   const [product, setProduct] = useState<UpdateProduct>({
     id: productId,

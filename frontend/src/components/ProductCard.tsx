@@ -35,8 +35,6 @@ export default function ProductCard({
 
   const isActivePromotion = actualDate >= String(startingDate) && actualDate <= String(endingDate);
 
-  if (!id) return null;
-
   return (
     <>
       {manageButton && (
@@ -49,7 +47,6 @@ export default function ProductCard({
           productName={name}
           productPrice={price}
           productDescription={description}
-          productImage={image}
           productCategory={category}
           productPromotion={promotion}
         />
