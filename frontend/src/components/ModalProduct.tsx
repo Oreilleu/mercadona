@@ -1,7 +1,7 @@
 import { postData, postFormData } from '@/utils/services';
 import { Category, CreateProduct, Promotion, Response } from '@/utils/types';
 import { useState } from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Form, Modal } from 'react-bootstrap';
 
 type ModalHandleProps = {
   showModalProduct: boolean;
@@ -28,6 +28,11 @@ export default function ModalProduct({ showModalProduct, setShowModalProduct, ca
 
   const addProduct = async (newProduct: CreateProduct) => {
     if (!product.name || !product.price || !product.description || !imageFile) {
+      if (Number.isNaN(newProduct.price)) {
+        setError('Veuillez renseigner un prix valide');
+        return;
+      }
+
       setError('Veuillez remplir tous les champs');
       return;
     }
@@ -83,66 +88,68 @@ export default function ModalProduct({ showModalProduct, setShowModalProduct, ca
         </Modal.Header>
         <Modal.Body>
           {error && <p className="text-center text-danger">{error}</p>}
-          <form className="container-form-product" encType="multipart/form-data">
-            <div className="container-input-product">
-              <label htmlFor="name-product">Nom du produit</label>
-              <input type="text" id="name-product" onChange={(e) => setProduct({ ...product, name: e.target.value })} />
-            </div>
-            <div className="container-input-product">
-              <label htmlFor="name-product">Prix</label>
-              <input
-                type="text"
-                id="name-product"
-                onChange={(e) => setProduct({ ...product, price: parseInt(e.target.value) })}
-              />
-            </div>
-            <div className="container-input-product">
-              <label htmlFor="name-product">Description</label>
-              <input type="text" id="name-product" onChange={(e) => setProduct({ ...product, description: e.target.value })} />
-            </div>
-            <div className="container-input-product">
-              <label htmlFor="name-product">Image</label>
-              <input
+          <Form className="container-form-product" encType="multipart/form-data">
+            <Form.Group className="container-input-product" controlId="name-product">
+              <Form.Label>Nom du produit</Form.Label>
+              <Form.Control type="text" onChange={(e) => setProduct({ ...product, name: e.target.value })} />
+            </Form.Group>
+            <Form.Group className="container-input-product" controlId="price-product">
+              <Form.Label>Prix</Form.Label>
+              <Form.Control type="text" onChange={(e) => setProduct({ ...product, price: parseInt(e.target.value) })} />
+            </Form.Group>
+            <Form.Group className="container-input-product" controlId="description-product">
+              <Form.Label>Description</Form.Label>
+              <Form.Control type="text" onChange={(e) => setProduct({ ...product, description: e.target.value })} />
+            </Form.Group>
+            <Form.Group className="container-input-product" controlId="image-product">
+              <Form.Label>Image</Form.Label>
+              <Form.Control
                 type="file"
-                id="name-product"
                 onChange={(e) => {
-                  if (e.target.files === null) {
+                  const target = e.target as HTMLInputElement;
+                  if (target.files === null) {
                     setError('Aucunne image selectioner');
                     return;
                   }
-                  setImageFile(e.target.files[0]);
+                  setImageFile(target.files[0]);
                 }}
               />
-            </div>
+            </Form.Group>
             {categories.length !== 1 && (
-              <div className="container-input-product">
-                <select className="my-3" onChange={(e) => setProduct({ ...product, categoryId: parseInt(e.target.value) })}>
+              <Form.Group className="container-input-product" controlId="category-product">
+                <Form.Select
+                  className="my-3"
+                  onChange={(e) => setProduct({ ...product, categoryId: parseInt(e.target.value) })}
+                >
                   <option value={undefined}>Catégorie</option>
                   {categories?.map((category: Category) => (
                     <option value={category.id} key={category.id}>
                       {category.name}
                     </option>
                   ))}
-                </select>
-              </div>
+                </Form.Select>
+              </Form.Group>
             )}
             {promotions.length !== 0 && (
-              <div className="container-input-product mt-3">
-                <select className="mb-3" onChange={(e) => setProduct({ ...product, promotionId: parseInt(e.target.value) })}>
+              <Form.Group className="container-input-product mt-3" controlId="promotion-id">
+                <Form.Select
+                  className="mb-3"
+                  onChange={(e) => setProduct({ ...product, promotionId: parseInt(e.target.value) })}
+                >
                   <option value={undefined}> Sans Promotion</option>
                   {promotions.map((promotion: Promotion) => (
                     <option value={promotion.id} key={promotion.id}>
                       {promotion.name}
                     </option>
                   ))}
-                </select>
-              </div>
+                </Form.Select>
+              </Form.Group>
             )}
 
             <Button onClick={() => addProduct(product)} className="mt-3">
               Ajouter
             </Button>
-          </form>
+          </Form>
         </Modal.Body>
       </Modal>
     </>

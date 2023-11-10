@@ -60,6 +60,10 @@ export default function ModalProductCard({
 
   const updateproduct = async (newProduct: UpdateProduct) => {
     if (!product.name || !product.price || !product.description) {
+      if (Number.isNaN(newProduct.price)) {
+        setError('Veuillez renseigner un prix valide');
+        return;
+      }
       setError('Veuillez remplir tous les champs');
       return;
     }

@@ -1,7 +1,7 @@
 import { deleteData, postData, putData } from '@/utils/services';
 import { Promotion, Response } from '@/utils/types';
 import { useState } from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Form, Modal } from 'react-bootstrap';
 
 type ModalHandleProps = {
   showModalPromotion: boolean;
@@ -47,18 +47,22 @@ export default function ModalPromotion({ showModalPromotion, setShowModalPromoti
     setError('');
   };
 
-  const modifyPromotion = async (newPromotion: Promotion) => {
+  const modifyPromotion = async (newPromotion: Promotion, event: React.MouseEvent) => {
+    event.preventDefault();
     const startingDate = new Date(newPromotion.startingDate).toLocaleDateString();
     const endingDate = new Date(newPromotion.endingDate).toLocaleDateString();
 
     if (!newPromotion.name || !newPromotion.startingDate || !newPromotion.endingDate || !newPromotion.discountPercentage) {
+      if (Number.isNaN(newPromotion.discountPercentage)) {
+        setError('Veuillez renseigner une remise valide');
+        return;
+      }
       setError('Veuillez remplir tous les champs');
       return;
     }
 
     if (newPromotion.discountPercentage < 0 || newPromotion.discountPercentage > 80) {
-      setError('La remise doit être comprise entre 0 et 80 %');
-      return;
+      return setError('La remise doit être comprise entre 0 et 80 %');
     }
 
     if (startingDate > endingDate) {
@@ -107,6 +111,10 @@ export default function ModalPromotion({ showModalPromotion, setShowModalPromoti
     const endingDate = new Date(newPromotion.endingDate).toLocaleDateString();
 
     if (!newPromotion.name || !newPromotion.startingDate || !newPromotion.endingDate || !newPromotion.discountPercentage) {
+      if (Number.isNaN(newPromotion.discountPercentage)) {
+        setError('Veuillez renseigner une remise valide');
+        return;
+      }
       setError('Veuillez remplir tous les champs');
       return;
     }
@@ -172,42 +180,35 @@ export default function ModalPromotion({ showModalPromotion, setShowModalPromoti
                       <>
                         {error && <p className="text-danger">{error}</p>}
                         {selectedIdPromotion === promotion.id && (
-                          <div className="container-input">
-                            <div className="container-item">
-                              <label htmlFor="update-name-promotion">Nom</label>
-                              <input
+                          <Form className="container-input">
+                            <Form.Group className="container-item" controlId="update-name-promotion">
+                              <Form.Label>Nom</Form.Label>
+                              <Form.Control
                                 type="text"
-                                disabled={!(selectedIdPromotion === promotion.id)}
                                 value={updatePromotion.name}
                                 onChange={(e) => setUpdatePromotion({ ...updatePromotion, name: e.target.value })}
-                                id="update-name-promotion"
                               />
-                            </div>
-                            <div className="container-item">
-                              <label htmlFor="update-start-date-promotion">Date de début</label>
-                              <input
+                            </Form.Group>
+                            <Form.Group className="container-item" controlId="update-start-date-promotion">
+                              <Form.Label>Date de début</Form.Label>
+                              <Form.Control
                                 type="date"
-                                disabled={!(selectedIdPromotion === promotion.id)}
                                 value={updatePromotion.startingDate}
                                 onChange={(e) => setUpdatePromotion({ ...updatePromotion, startingDate: e.target.value })}
-                                id="update-start-date-promotion"
                               />
-                            </div>
-                            <div className="container-item">
-                              <label htmlFor="update-end-date-promotion">Date de fin</label>
-                              <input
+                            </Form.Group>
+                            <Form.Group className="container-item" controlId="update-end-date-promotion">
+                              <Form.Label>Date de fin</Form.Label>
+                              <Form.Control
                                 type="date"
-                                disabled={!(selectedIdPromotion === promotion.id)}
                                 value={updatePromotion.endingDate}
                                 onChange={(e) => setUpdatePromotion({ ...updatePromotion, endingDate: e.target.value })}
-                                id="update-end-date-promotion"
                               />
-                            </div>
-                            <div className="container-item">
-                              <label htmlFor="update-discount-promotion">Remise</label>
-                              <input
+                            </Form.Group>
+                            <Form.Group className="container-item" controlId="update-discount-promotion">
+                              <Form.Label>Remise</Form.Label>
+                              <Form.Control
                                 type="number"
-                                disabled={!(selectedIdPromotion === promotion.id)}
                                 value={updatePromotion.discountPercentage || ''}
                                 onChange={(e) =>
                                   setUpdatePromotion({
@@ -215,10 +216,9 @@ export default function ModalPromotion({ showModalPromotion, setShowModalPromoti
                                     discountPercentage: parseInt(e.target.value || '0'),
                                   })
                                 }
-                                id="update-discount-promotion"
                               />
-                            </div>
-                            <Button type="submit" onClick={() => modifyPromotion(updatePromotion)}>
+                            </Form.Group>
+                            <Button type="submit" onClick={(event) => modifyPromotion(updatePromotion, event)}>
                               Modifier
                             </Button>
                             <p
@@ -236,7 +236,7 @@ export default function ModalPromotion({ showModalPromotion, setShowModalPromoti
                             >
                               &times;
                             </p>
-                          </div>
+                          </Form>
                         )}
 
                         {!selectedIdPromotion && (
@@ -263,21 +263,32 @@ export default function ModalPromotion({ showModalPromotion, setShowModalPromoti
             </ul>
           )}
           {formType === 'add' && (
-            <div className="container-input-add-promotion">
+            <Form className="container-input-add-promotion">
               {error && <p className="text-danger">{error}</p>}
-              <label>Nom de la Promotion : </label>
-              <input type="text" onChange={(e) => setNewPromotion({ ...newPromotion, name: e.target.value })} />
-              <label>Date de début : </label>
-              <input type="date" onChange={(e) => setNewPromotion({ ...newPromotion, startingDate: e.target.value })} />
-              <label>Date de fin: </label>
-              <input type="date" onChange={(e) => setNewPromotion({ ...newPromotion, endingDate: e.target.value })} />
-              <label>Remise : </label>
-              <input
-                type="text"
-                onChange={(e) => setNewPromotion({ ...newPromotion, discountPercentage: parseInt(e.target.value) })}
-              />
+              <Form.Group controlId="name-add-modal-promotion">
+                <Form.Label>Nom de la Promotion : </Form.Label>
+                <Form.Control type="text" onChange={(e) => setNewPromotion({ ...newPromotion, name: e.target.value })} />
+              </Form.Group>
+              <Form.Group controlId="name-startDate-modal-promotion">
+                <Form.Label>Date de début : </Form.Label>
+                <Form.Control
+                  type="date"
+                  onChange={(e) => setNewPromotion({ ...newPromotion, startingDate: e.target.value })}
+                />
+              </Form.Group>
+              <Form.Group controlId="name-endDate-modal-promotion">
+                <Form.Label>Date de fin: </Form.Label>
+                <Form.Control type="date" onChange={(e) => setNewPromotion({ ...newPromotion, endingDate: e.target.value })} />
+              </Form.Group>
+              <Form.Group controlId="name-discount-modal-promotion">
+                <Form.Label>Remise : </Form.Label>
+                <Form.Control
+                  type="text"
+                  onChange={(e) => setNewPromotion({ ...newPromotion, discountPercentage: parseInt(e.target.value) })}
+                />
+              </Form.Group>
               <Button onClick={() => addPromotion(newPromotion)}>Créer</Button>
-            </div>
+            </Form>
           )}
         </Modal.Body>
       </Modal>

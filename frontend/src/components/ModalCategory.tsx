@@ -1,7 +1,7 @@
 import { deleteData, postData, putData } from '@/utils/services';
 import { Category, Response } from '@/utils/types';
 import { useState } from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Form, Modal } from 'react-bootstrap';
 
 type ModalHandleProps = {
   showModalCategory: boolean;
@@ -127,17 +127,17 @@ export default function ModalCategory({ showModalCategory, setShowModalCategory,
                     ) : (
                       <>
                         {selectedIdCategory === category.id && (
-                          <div className="container-input">
+                          <Form className="container-input">
                             <div className="container-item">
-                              <label htmlFor="update-name-category">Nom</label>
-                              <input
-                                type="text"
-                                onChange={(e) =>
-                                  setUpdateCategory({ id: category.id, name: e.target.value, products: category.products })
-                                }
-                                disabled={!(selectedIdCategory === category.id)}
-                                id="update-name-category"
-                              />
+                              <Form.Group controlId="name-form-category">
+                                <Form.Label>Nom</Form.Label>
+                                <Form.Control
+                                  type="text"
+                                  onChange={(e) =>
+                                    setUpdateCategory({ id: category.id, name: e.target.value, products: category.products })
+                                  }
+                                ></Form.Control>
+                              </Form.Group>
                               <Button type="submit" onClick={() => modifyCategory(updateCategory)}>
                                 Modifier
                               </Button>
@@ -151,7 +151,7 @@ export default function ModalCategory({ showModalCategory, setShowModalCategory,
                                 &times;
                               </p>
                             </div>
-                          </div>
+                          </Form>
                         )}
 
                         {!selectedIdCategory && (
@@ -174,12 +174,14 @@ export default function ModalCategory({ showModalCategory, setShowModalCategory,
             </ul>
           )}
           {formType === 'add' && (
-            <div className="container-input-add-category">
+            <Form className="container-input-add-category">
               {error && <p className="text-center text-danger">{error}</p>}
-              <label>Nom de la catégorie : </label>
-              <input type="text" onChange={(e) => setNewCategory(e.target.value)} />
+              <Form.Group controlId="name-form-category">
+                <Form.Label>Nom de la catégorie : </Form.Label>
+                <Form.Control type="text" onChange={(e) => setNewCategory(e.target.value)} />
+              </Form.Group>
               <Button onClick={() => addCategory(newCategory)}>Créer</Button>
-            </div>
+            </Form>
           )}
         </Modal.Body>
       </Modal>
