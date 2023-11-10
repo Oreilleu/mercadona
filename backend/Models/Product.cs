@@ -18,6 +18,8 @@ namespace Mercadona.Models
 
         public Category? Category { get; set; }
 
+        [ForeignKey("Promotion")]
+        public int? PromotionId { get; set; }
         public Promotion? Promotion { get; set; }
 
     }

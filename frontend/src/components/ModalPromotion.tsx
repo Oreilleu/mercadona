@@ -1,4 +1,4 @@
-import { postData, putData } from '@/utils/services';
+import { deleteData, postData, putData } from '@/utils/services';
 import { Promotion, Response } from '@/utils/types';
 import { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
@@ -48,7 +48,6 @@ export default function ModalPromotion({ showModalPromotion, setShowModalPromoti
   };
 
   const modifyPromotion = async (newPromotion: Promotion) => {
-    console.log(newPromotion);
     if (!newPromotion.name || !newPromotion.startingDate || !newPromotion.endingDate || !newPromotion.discountPercentage) {
       setError('Veuillez remplir tous les champs');
       return;
@@ -80,7 +79,7 @@ export default function ModalPromotion({ showModalPromotion, setShowModalPromoti
       return;
     }
 
-    const data: Response | string = await postData('https://localhost:7208/api/PromotionControllers', id);
+    const data: Response | string = await deleteData('https://localhost:7208/api/PromotionControllers', id);
 
     if (typeof data === 'string') {
       setError(data);
@@ -193,7 +192,7 @@ export default function ModalPromotion({ showModalPromotion, setShowModalPromoti
                               <input
                                 type="number"
                                 disabled={!(selectedIdPromotion === promotion.id)}
-                                value={updatePromotion.discountPercentage || 0}
+                                value={updatePromotion.discountPercentage || ''}
                                 onChange={(e) =>
                                   setUpdatePromotion({
                                     ...updatePromotion,

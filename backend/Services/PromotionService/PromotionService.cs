@@ -99,6 +99,13 @@ namespace Mercadoa.Services.PromotionService
                 if (promotion is null)
                     throw new Exception($"Promotion with id {id} not found");
 
+                var productsToMove = _context.Products.Where(p => p.PromotionId == id).ToList();
+
+                foreach (var product in productsToMove)
+                {
+                    product.PromotionId = null;
+                }
+
                 _context.Promotions.Remove(promotion);
 
                 await _context.SaveChangesAsync();

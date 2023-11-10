@@ -67,9 +67,11 @@ export default function ModalProduct({ showModalProduct, setShowModalProduct, ca
         window.location.reload();
       } else {
         setError(dataImage.message);
+        return;
       }
     } else {
       setError(data.message);
+      return;
     }
   };
 

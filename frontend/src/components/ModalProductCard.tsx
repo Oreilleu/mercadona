@@ -1,4 +1,4 @@
-import { deleteData } from '@/utils/services';
+import { deleteData, postFormData, putData } from '@/utils/services';
 import { Category, Promotion, Response, UpdateProduct } from '@/utils/types';
 import { useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
@@ -59,7 +59,58 @@ export default function ModalProductCard({
   };
 
   const updateproduct = async (newProduct: UpdateProduct) => {
-    console.log(newProduct);
+    if (!product.name || !product.price || !product.description) {
+      setError('Veuillez remplir tous les champs');
+      return;
+    }
+
+    if (
+      imageFile &&
+      imageFile.type !== 'image/png' &&
+      imageFile.type !== 'image/jpeg' &&
+      imageFile.type !== 'image/jpg' &&
+      imageFile.type !== 'image/webp'
+    ) {
+      setError('Veuillez sélectionner une image au format PNG, JPEG, JPG ou WEBP');
+      return;
+    }
+
+    const data: Response | string = await putData('https://localhost:7208/api/ProductControllers', newProduct);
+
+    if (typeof data === 'string') {
+      setError(data);
+      return;
+    }
+
+    if (data.success) {
+      console.log('Le produit a bien été modifier');
+      console.log('imageFile', imageFile);
+
+      if (!imageFile) {
+        return window.location.reload();
+      }
+
+      const formData = new FormData();
+      formData.append('imageFile', imageFile);
+      formData.append('idProduct', `${data.data.id}`);
+
+      const dataImage: Response | string = await postFormData('https://localhost:7208/api/UploadImage', formData);
+      if (typeof dataImage === 'string') {
+        setError(dataImage);
+        return;
+      }
+
+      if (dataImage.success) {
+        console.log('Image ajoutée');
+        window.location.reload();
+      } else {
+        setError(dataImage.message);
+        return;
+      }
+    } else {
+      setError(data.message);
+      return;
+    }
   };
 
   const deleteProduct = async (id: number) => {
@@ -100,6 +151,7 @@ export default function ModalProductCard({
         <Modal.Body>
           {handleTab === 'put' && (
             <Form>
+              {error && <p className="text-center text-danger">{error}</p>}
               <Form.Group className="mb-3" controlId="name-product-card">
                 <Form.Label>Nom du produit</Form.Label>
                 <Form.Control
@@ -120,7 +172,7 @@ export default function ModalProductCard({
                 <Form.Label>Prix</Form.Label>
                 <Form.Control
                   type="number"
-                  value={product.price}
+                  value={product.price || ''}
                   onChange={(e) => setProduct({ ...product, price: parseInt(e.target.value) })}
                 />
               </Form.Group>
@@ -173,6 +225,7 @@ export default function ModalProductCard({
                           </option>
                         )
                     )}
+                    {productPromotion && <option value={undefined}>Retirer promotion</option>}
                   </Form.Select>
                 </Form.Group>
               )}

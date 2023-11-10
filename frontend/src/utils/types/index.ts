@@ -41,7 +41,7 @@ export type UpdateProduct = {
 
 
 export type Response = {
-  data: any[];
+  data: any[] | any;
   success: boolean;
   message: string
 }

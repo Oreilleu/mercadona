@@ -1,4 +1,5 @@
 global using AutoMapper;
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 
 namespace Mercadona.Services.ProductService
@@ -106,10 +107,13 @@ namespace Mercadona.Services.ProductService
                     }
                 }
 
+                var promotion = await _context.Promotions.FindAsync(updatedProduct.PromotionId);
+
                 product.Name = updatedProduct.Name;
                 product.Description = updatedProduct.Description;
                 product.Price = updatedProduct.Price;
                 product.Category = category;
+                product.PromotionId = promotion?.Id;
 
                 await _context.SaveChangesAsync();
                 serviceResponse.Data = _mapper.Map<GetProductDto>(product);
@@ -134,6 +138,13 @@ namespace Mercadona.Services.ProductService
 
                 if (product == null)
                     throw new Exception($"Product with id {id} not found");
+
+                string deletePath = Path.Combine("wwwroot/images", product.ImageUrl.Split('/').Last());
+                if (deletePath is null)
+                {
+                    throw new Exception($"Image with id {id} not found");
+                }
+                File.Delete(deletePath);
 
                 _context.Products.Remove(product);
 
