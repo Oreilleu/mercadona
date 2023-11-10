@@ -75,7 +75,7 @@ using (var scope = app.Services.CreateScope())
 
     if (!context.Categories.Any())
     {
-        context.Categories.Add(new Category { Name = "Autre", IsOtherCategory = true });
+        context.Categories.Add(new Category { Name = "Autre" });
         context.SaveChanges();
     }
 }

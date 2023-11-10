@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace backend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231110125635_Initial")]
+    [Migration("20231110165447_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -32,9 +32,6 @@ namespace backend.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("IsOtherCategory")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
