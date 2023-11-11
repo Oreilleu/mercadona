@@ -1,12 +1,13 @@
 'use client';
 import Banner from '@/components/Banner';
 import Layout from '@/components/Layout';
+import ModalAdmin from '@/components/ModalAdmin';
 import ModalCategory from '@/components/ModalCategory';
 import ModalProduct from '@/components/ModalProduct';
 import ModalPromotion from '@/components/ModalPromotion';
 import ProductCard from '@/components/ProductCard';
-import { filterproducts, getCategory, getProducts, getPromotions } from '@/utils/services';
-import { Category, Product, Promotion } from '@/utils/types';
+import { filterproducts, getCategory, getProducts, getPromotions, getUsers } from '@/utils/services';
+import { Category, Product, Promotion, User } from '@/utils/types';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Button, Container } from 'react-bootstrap';
@@ -18,10 +19,12 @@ export default function Admin() {
   const [filteredProducts, setFilteredProducts] = useState<Product[]>();
   const [listCategories, setListCategories] = useState<Category[]>([]);
   const [listPromotions, setListPromotions] = useState<Promotion[]>([]);
+  const [listUsers, setListUsers] = useState<User[]>([]);
   const [showPromotion, setShowPromotion] = useState(false);
   const [showModalCategory, setShowModalCategory] = useState(false);
   const [showModalPromotion, setShowModalPromotion] = useState(false);
   const [showModalProduct, setShowModalProduct] = useState(false);
+  const [showModalAdmin, setShowModalAdmin] = useState(false);
 
   const [error, setError] = useState<string>('');
 
@@ -68,9 +71,20 @@ export default function Admin() {
       }
     };
 
+    const fetchUsers = async () => {
+      const users: User[] | string = await getUsers();
+
+      if (typeof users == 'string') {
+        setError(users);
+      } else {
+        setListUsers(users);
+      }
+    };
+
     fetchProducts();
     fetchCategory();
     fetchPromotions();
+    fetchUsers();
   }, []);
 
   return (
@@ -94,13 +108,15 @@ export default function Admin() {
         promotions={listPromotions}
       />
 
+      <ModalAdmin showModalAdmin={showModalAdmin} setShowModalAdmin={setShowModalAdmin} users={listUsers} />
+
       <Banner title="Admin" />
       {error ? (
         <p className="text-center text-danger">{error}</p>
       ) : (
         <>
           <Container className="container-button">
-            {/* <Button>Gestion des administrateurs</Button> */}
+            <Button onClick={() => setShowModalAdmin(true)}>Gestion des administrateurs</Button>
             <Button onClick={() => setShowModalCategory(true)}>Gestion categories</Button>
             <Button onClick={() => setShowModalPromotion(true)}>Gestion des promotions</Button>
             <Button onClick={() => setShowModalProduct(true)}>Ajouter un produit</Button>

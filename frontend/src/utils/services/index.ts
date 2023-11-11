@@ -1,4 +1,4 @@
-import { Category, Product, Promotion, Response } from "../types";
+import { Category, Product, Promotion, Response, User } from "../types";
 
 export const filterproducts = (productsData: Product[], selectedCategory: string, showPromotion: boolean) => {
   let filteredProducts = [...productsData];
@@ -19,7 +19,7 @@ export const filterproducts = (productsData: Product[], selectedCategory: string
 export const getData = async (url: string) => {
 
   try {
-    const response = await fetch(url);
+    const response = await fetch(url)
 
     if(!response.ok) {
       throw new Error('Erreur lors de la récupération des donées');
@@ -71,6 +71,40 @@ export const getPromotions = async () => {
   }
 };
 
+export const getUsers = async () => {
+  const token = checkToken();
+
+  if(!token){
+    return "Vous devez être connecté pour créer des données" as string;
+  }
+
+  try {
+    const response = await fetch("https://localhost:7208/Auth/GetAll",{
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    });
+
+    if(!response.ok) {
+      throw new Error('Erreur lors de la récupération des donées');
+    }
+
+    const data = await response.json();
+
+    if (typeof data === 'string') {
+      return data;
+    }
+
+    if (data.success) {
+      return data.data as User[];
+    } else {
+      return data.message;
+    }
+
+  } catch (error) {
+    return "Erreur lors de la récupération des données" ;
+  }
+};
+
 export const postData = async (url: string, body: any) => {
   const token = checkToken();
 
@@ -86,13 +120,15 @@ export const postData = async (url: string, body: any) => {
       });
 
       if(!response.ok) {
-        throw new Error('Erreur lors de la création des données');
+        const data = await response.json();
+        throw new Error(data.message || "");
       }
 
       const data: Response = await response.json();
+
       return data;
   } catch (error) {
-    return "Erreur lors de la création des données" as string;
+    return String(error) || String("Erreur lors de la création des données");
   }
 }
 

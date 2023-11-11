@@ -1,3 +1,6 @@
+using Mercadona.Dtos.User;
+using Mercadona.Dtos.UserDto;
+
 namespace Mercadona
 {
     public class AutoMapperProfile : Profile
@@ -13,6 +16,8 @@ namespace Mercadona
             CreateMap<Promotion, GetPromotionByIdDto>();
             CreateMap<AddPromotionDto, Promotion>();
             CreateMap<Category, GetCategoryForProductDto>();
+            CreateMap<User, GetAllUserDto>();
+            CreateMap<User, GetUserDto>();
         }
     }
 }

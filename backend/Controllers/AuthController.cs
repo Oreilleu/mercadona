@@ -1,8 +1,11 @@
 using Mercadona.Dtos.User;
+using Mercadona.Dtos.UserDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mercadona.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class AuthController : ControllerBase
@@ -14,6 +17,21 @@ namespace Mercadona.Controllers
             _authRepo = authRepo;
         }
 
+
+        [HttpGet("GetAll")]
+        public async Task<ActionResult<ServiceResponse<List<GetAllUserDto>>>> GetAll()
+        {
+            var response = await _authRepo.GetAllUsers();
+
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
+
+        [AllowAnonymous]
         [HttpPost("Register")]
         public async Task<ActionResult<ServiceResponse<int>>> Register(UserRegisterDto request)
         {
@@ -21,20 +39,21 @@ namespace Mercadona.Controllers
                 new User { Username = request.Username }, request.Password
             );
 
-            if(!response.Success)
+            if (!response.Success)
             {
                 return BadRequest(response);
             }
 
             return Ok(response);
-        }   
+        }
 
+        [AllowAnonymous]
         [HttpPost("Login")]
         public async Task<ActionResult<ServiceResponse<int>>> Login(UserLoginDto request)
         {
             var response = await _authRepo.Login(request.Username, request.Password);
 
-            if(!response.Success)
+            if (!response.Success)
             {
                 return BadRequest(response);
             }
@@ -43,16 +62,16 @@ namespace Mercadona.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ServiceResponse<GetUserDto>>> Delete(UserLoginDto request)
+        public async Task<ActionResult<ServiceResponse<GetUserDto>>> Delete(int id)
         {
-            var response = await _authRepo.DeleteUser(request.Id);
+            var response = await _authRepo.DeleteUser(id);
 
-            if(!response.Success)
+            if (!response.Success)
             {
                 return BadRequest(response);
             }
 
             return Ok(response);
-        }   
+        }
     }
 }

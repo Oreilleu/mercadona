@@ -2,6 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Mercadona.Dtos.User;
+using Mercadona.Dtos.UserDto;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -149,6 +150,23 @@ namespace Mercadona.Data
             SecurityToken token = tokenHandler.CreateToken(tokenDescriptior);
 
             return tokenHandler.WriteToken(token);
+        }
+
+        public async Task<ServiceResponse<List<GetAllUserDto>>> GetAllUsers()
+        {
+            var serviceResponse = new ServiceResponse<List<GetAllUserDto>>();
+
+            try
+            {
+                serviceResponse.Data = await _context.Users.Select(u => _mapper.Map<GetAllUserDto>(u)).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+
+            return serviceResponse;
         }
     }
 }
