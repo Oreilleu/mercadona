@@ -6,14 +6,12 @@ import ModalCategory from '@/components/ModalCategory';
 import ModalProduct from '@/components/ModalProduct';
 import ModalPromotion from '@/components/ModalPromotion';
 import ProductCard from '@/components/ProductCard';
-import { filterproducts, getCategory, getProducts, getPromotions, getUsers } from '@/utils/services';
+import { filterproducts, getCategory, getProducts, getPromotions, getUsers, verifyToken } from '@/utils/services';
 import { Category, Product, Promotion, User } from '@/utils/types';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Button, Container } from 'react-bootstrap';
 
 export default function Admin() {
-  const router = useRouter();
   const [productsData, setProductsData] = useState<Product[]>();
   const [selectedCategory, setSelectedCategory] = useState('');
   const [filteredProducts, setFilteredProducts] = useState<Product[]>();
@@ -35,11 +33,7 @@ export default function Admin() {
   }, [productsData, selectedCategory, showPromotion]);
 
   useEffect(() => {
-    const token = document.cookie.split('=')[1];
-
-    if (!token) {
-      router.push('/connexion');
-    }
+    verifyToken();
 
     const fetchProducts = async () => {
       const products: Product[] | string = await getProducts();

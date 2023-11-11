@@ -73,5 +73,14 @@ namespace Mercadona.Controllers
 
             return Ok(response);
         }
+
+        [AllowAnonymous]
+        [HttpPost("verifytoken")]
+        public async Task<ActionResult<ServiceResponse<bool>>> VerifyToken([FromBody] string token)
+        {
+            var response = await _authRepo.VerifyToken(token);
+
+            return Ok(response);
+        }
     }
 }

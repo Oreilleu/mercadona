@@ -10,5 +10,6 @@ namespace Mercadona.Data
         Task<ServiceResponse<string>> Login(string username, string password);
         Task<ServiceResponse<List<GetUserDto>>> DeleteUser(int id);
         Task<bool> UserExists(string username);
+        Task<ServiceResponse<bool>> VerifyToken(string token);
     }
 }

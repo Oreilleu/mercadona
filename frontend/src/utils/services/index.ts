@@ -181,8 +181,6 @@ export const putData = async (url: string, body: any) => {
   } catch (error) {
     return "Erreur lors de la modification des données" as string;
   }
-
-
 }
 
 export const deleteData = async (url: string, id: number) => {
@@ -215,3 +213,36 @@ export const checkToken = () => {
 
   return token;
 }
+
+export const verifyToken = async () => {
+  const token = checkToken();
+
+  if(!token){
+    console.error("pas de token")
+    return;
+  }
+
+  const response = await fetch('https://localhost:7208/Auth/VerifyToken', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(token),
+  });
+
+  if(!response.ok) {
+    console.error("erreur de vérification du token")
+    document.cookie = `token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    window.location.href = "/";
+    return;
+  }
+
+  const isValidToken: Response = await response.json();
+
+  if(!isValidToken.data) {
+    console.error("token invalide")
+    document.cookie = `token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    window.location.href = "/";
+    return;
+  }
+
+  return true;
+};

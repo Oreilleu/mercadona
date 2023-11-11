@@ -168,5 +168,46 @@ namespace Mercadona.Data
 
             return serviceResponse;
         }
+
+        public Task<ServiceResponse<bool>> VerifyToken(string token)
+        {
+            var serviceResponse = new ServiceResponse<bool>();
+
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var appSettingsToken = _configuration.GetSection("AppSettings:Token").Value;
+
+                if (appSettingsToken is null)
+                {
+                    throw new Exception("AppSettings Token is null.");
+                }
+
+                var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(appSettingsToken));
+
+                var validationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = key,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
+                };
+
+                SecurityToken validatedToken;
+                var principal = tokenHandler.ValidateToken(token, validationParameters, out validatedToken);
+
+                serviceResponse.Data = true;
+            }
+            catch
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = "Token non valide";
+                serviceResponse.Data = false;
+            }
+
+            return Task.FromResult(serviceResponse);
+        }
     }
 }
