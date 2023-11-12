@@ -219,7 +219,6 @@ export const verifyToken = async () => {
 
   if(!token){
     console.error("pas de token")
-    window.location.href = "/";
     return;
   }
 

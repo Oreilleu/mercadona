@@ -142,7 +142,7 @@ export default function ModalAdmin({ showModalAdmin, setShowModalAdmin, users }:
                 <Form.Label>Username : </Form.Label>
                 <Form.Control type="text" onChange={(e) => setUser({ ...user, username: e.target.value })} />
               </Form.Group>
-              <Form.Group controlId="username-form">
+              <Form.Group controlId="password-form">
                 <Form.Label>Mot de passe : </Form.Label>
                 <Form.Control type="password" onChange={(e) => setUser({ ...user, password: e.target.value })} />
               </Form.Group>
