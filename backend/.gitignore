@@ -478,3 +478,6 @@ $RECYCLE.BIN/
 
 # Image
 wwwroot
+
+# env
+.env

@@ -121,21 +121,18 @@ namespace Mercadona.Data
 
         private string CreateToken(User user)
         {
+            var secretToken = Environment.GetEnvironmentVariable("SecretToken");
+
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Username)
             };
 
-            var appSettingsToken = _configuration.GetSection("AppSettings:Token").Value;
+            if (secretToken is null)
+                throw new Exception("Secret Token is null.");
 
-            if (appSettingsToken is null)
-            {
-                throw new Exception("AppSettings Token is null.");
-            }
-
-            SymmetricSecurityKey key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(appSettingsToken));
-
+            SymmetricSecurityKey key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(secretToken));
 
             SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
@@ -176,14 +173,15 @@ namespace Mercadona.Data
             try
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
-                var appSettingsToken = _configuration.GetSection("AppSettings:Token").Value;
+                var secretToken = Environment.GetEnvironmentVariable("SecretToken");
 
-                if (appSettingsToken is null)
+
+                if (secretToken is null)
                 {
-                    throw new Exception("AppSettings Token is null.");
+                    throw new Exception("Token is null.");
                 }
 
-                var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(appSettingsToken));
+                var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(secretToken));
 
                 var validationParameters = new TokenValidationParameters
                 {

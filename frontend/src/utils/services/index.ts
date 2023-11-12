@@ -218,10 +218,13 @@ export const verifyToken = async () => {
   const token = checkToken();
 
   if(!token){
+    console.error("pas de token")
+    window.location.href = "/";
     return;
   }
 
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Auth/VerifyToken`, {
+
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Auth/verifytoken`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(token),

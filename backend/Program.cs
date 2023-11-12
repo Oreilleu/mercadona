@@ -13,7 +13,16 @@ using Mercadona.Services.CategoryService;
 using Mercadona.Services.PromotionService;
 using Mercadoa.Services.PromotionService;
 
+DotNetEnv.Env.Load();
+
 var builder = WebApplication.CreateBuilder(args);
+
+var defaultConnectionString = Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection");
+defaultConnectionString ??= builder.Configuration.GetConnectionString("DefaultConnection");
+
+var secretToken = Environment.GetEnvironmentVariable("SecretToken");
+secretToken ??= builder.Configuration.GetSection("AppSettings:Token").Value;
+
 
 builder.Services.AddCors(options =>
 {
@@ -26,7 +35,7 @@ builder.Services.AddCors(options =>
 // Add services to the container.
 builder.Services.AddDbContext<DataContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseNpgsql(defaultConnectionString);
 });
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -50,6 +59,11 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IPromotionService, PromotionService>();
+if (string.IsNullOrEmpty(secretToken))
+{
+    throw new InvalidOperationException("La clé secrète du token JWT n'est pas définie.");
+}
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(opt =>
     {
@@ -57,11 +71,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         {
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8
-            .GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value!)),
+            .GetBytes(secretToken)),
             ValidateIssuer = false,
             ValidateAudience = false
         };
-
     });
 
 var app = builder.Build();
@@ -84,21 +97,30 @@ using (var scope = app.Services.CreateScope())
         var authRepository = services.GetRequiredService<IAuthRepository>();
         var userService = services.GetRequiredService<IAuthRepository>();
 
+        var defaultAccount = Environment.GetEnvironmentVariable("DefaultAccount");
+
+
         var defaultUsername = "admin";
-        var defaultPassword = "password";
+        var defaultPassword = defaultAccount;
         if (!await authRepository.UserExists(defaultUsername))
         {
             var newUser = new User { Username = defaultUsername, IsInitialAccount = true };
-            var registrationResult = await authRepository.Register(newUser, defaultPassword);
-
-            if (registrationResult.Success)
+            if (defaultPassword != null)
             {
-                Console.WriteLine($"User created");
+                var registrationResult = await authRepository.Register(newUser, defaultPassword);
+
+                if (registrationResult.Success)
+                {
+                    Console.WriteLine($"User created");
+                }
+                else
+                {
+                    Console.WriteLine($"Failed to create user: {registrationResult.Message}");
+                }
             }
             else
             {
-                Console.WriteLine($"Failed to create user: {registrationResult.Message}");
-
+                Console.WriteLine($"Failed to create user: default password is null");
             }
         }
     }
