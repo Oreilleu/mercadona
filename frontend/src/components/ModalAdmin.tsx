@@ -115,7 +115,7 @@ export default function ModalAdmin({ showModalAdmin, setShowModalAdmin, users }:
         <Modal.Body>
           {handleTab === 'edit' && (
             <>
-              {users.length === 1 && <p>Pas encore d'adinistrateur</p>}
+              {users.length === 1 && <p>Pas encore d&apos;adinistrateur</p>}
               {error && <p className="text-center text-danger">{error}</p>}
               <ul className="list-unstyled">
                 {users?.map(

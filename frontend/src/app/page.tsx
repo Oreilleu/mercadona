@@ -67,7 +67,7 @@ export default function Home() {
       ) : (
         <>
           {productsData?.length === 0 ? (
-            <p className="text-center text-danger">Il n'y a pas de produit à afficher</p>
+            <p className="text-center text-danger">Il n&apos;y a pas de produit à afficher</p>
           ) : (
             <>
               <Container className="container-button">

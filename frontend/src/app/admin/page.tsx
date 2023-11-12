@@ -118,7 +118,7 @@ export default function Admin() {
           <Container className="container-list-product-card">
             <h2>Produits</h2>
             {productsData?.length === 0 ? (
-              <p className="text-center text-danger mb-3">Il n'y a pas de produit à afficher pour le moment</p>
+              <p className="text-center text-danger mb-3">Il n&apos;y a pas de produit à afficher pour le moment</p>
             ) : (
               <Container>
                 <div className="container-button-filter">

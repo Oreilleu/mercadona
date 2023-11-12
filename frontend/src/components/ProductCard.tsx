@@ -1,4 +1,5 @@
 import { Category, Promotion } from '@/utils/types';
+import Image from 'next/image';
 import { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import ModalProductCard from './ModalProductCard';
@@ -35,6 +36,8 @@ export default function ProductCard({
 
   const isActivePromotion = actualDate >= String(startingDate) && actualDate <= String(endingDate);
 
+  if (!id) return null;
+
   return (
     <>
       {manageButton && (
@@ -59,7 +62,7 @@ export default function ProductCard({
         )}
 
         <div className="container-img">
-          <img src={image} alt="banner" />
+          <Image src={image} alt="banner" width={300} height={260} />
         </div>
 
         <div className="content">
