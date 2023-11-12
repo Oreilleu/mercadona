@@ -23,12 +23,18 @@ defaultConnectionString ??= builder.Configuration.GetConnectionString("DefaultCo
 var secretToken = Environment.GetEnvironmentVariable("SecretToken");
 secretToken ??= builder.Configuration.GetSection("AppSettings:Token").Value;
 
+var allowedHosts = Environment.GetEnvironmentVariable("AllowedHosts");
+
+if (string.IsNullOrEmpty(allowedHosts))
+{
+    throw new InvalidOperationException("La liste des tokens autorisés n'est pas définie.");
+}
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CORS", policy =>
                       {
-                          policy.WithOrigins("*").AllowAnyHeader().AllowAnyMethod();
+                          policy.WithOrigins(allowedHosts).AllowAnyHeader().AllowAnyMethod();
                       });
 });
 
