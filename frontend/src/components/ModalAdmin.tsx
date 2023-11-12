@@ -92,7 +92,8 @@ export default function ModalAdmin({ showModalAdmin, setShowModalAdmin, users }:
 
     if (data.success) {
       console.log('Administrateur supprimé');
-      window.location.reload();
+      document.cookie = `token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+      window.location.href = '/';
     } else {
       setError(data.message);
     }
