@@ -92,6 +92,7 @@ export default function Home() {
                   {filteredProducts?.map((product: Product, index: number) => (
                     <li key={`PRODUCT INDEX ${index} - PRODUCT ID ${product.id}`}>
                       <ProductCard
+                        id={product.id}
                         name={product.name}
                         price={product.price}
                         description={product.description}

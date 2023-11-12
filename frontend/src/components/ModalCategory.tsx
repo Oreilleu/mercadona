@@ -40,7 +40,7 @@ export default function ModalCategory({ showModalCategory, setShowModalCategory,
       return;
     }
 
-    const data: Response | string = await putData('https://localhost:7208/api/Category', {
+    const data: Response | string = await putData(`${process.env.NEXT_PUBLIC_API_URL}/api/Category`, {
       id: newCategory.id,
       name: newCategory.name,
     });
@@ -64,7 +64,7 @@ export default function ModalCategory({ showModalCategory, setShowModalCategory,
       return;
     }
 
-    const data: Response | string = await deleteData('https://localhost:7208/api/Category', id);
+    const data: Response | string = await deleteData(`${process.env.NEXT_PUBLIC_API_URL}/api/Category`, id);
 
     if (typeof data === 'string') {
       setError(data);
@@ -85,7 +85,7 @@ export default function ModalCategory({ showModalCategory, setShowModalCategory,
       return;
     }
 
-    const data: Response | string = await postData('https://localhost:7208/api/Category', { name });
+    const data: Response | string = await postData(`${process.env.NEXT_PUBLIC_API_URL}/api/Category`, { name });
 
     if (typeof data === 'string') {
       setError(data);

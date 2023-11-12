@@ -47,7 +47,7 @@ export default function ModalProduct({ showModalProduct, setShowModalProduct, ca
       return;
     }
 
-    const data: Response | string = await postData('https://localhost:7208/api/ProductControllers', newProduct);
+    const data: Response | string = await postData(`${process.env.NEXT_PUBLIC_API_URL}/api/ProductControllers`, newProduct);
 
     if (typeof data === 'string') {
       setError(data);
@@ -61,7 +61,7 @@ export default function ModalProduct({ showModalProduct, setShowModalProduct, ca
       formData.append('imageFile', imageFile);
       formData.append('idProduct', `${data.data[data.data.length - 1].id}`);
 
-      const dataImage: Response | string = await postFormData('https://localhost:7208/api/UploadImage', formData);
+      const dataImage: Response | string = await postFormData(`${process.env.NEXT_PUBLIC_API_URL}/api/UploadImage`, formData);
       if (typeof dataImage === 'string') {
         setError(dataImage);
         return;

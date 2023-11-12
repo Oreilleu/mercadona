@@ -66,7 +66,7 @@ export default function ModalAdmin({ showModalAdmin, setShowModalAdmin, users }:
       return;
     }
 
-    const data = await postData('https://localhost:7208/Auth/Register', newUser);
+    const data = await postData(`${process.env.NEXT_PUBLIC_API_URL}/Auth/Register`, newUser);
 
     if (typeof data === 'string') {
       setError(data);
@@ -83,7 +83,7 @@ export default function ModalAdmin({ showModalAdmin, setShowModalAdmin, users }:
 
   const deleteUser = async (id: number) => {
     setError('');
-    const data = await deleteData('https://localhost:7208/Auth', id);
+    const data = await deleteData(`${process.env.NEXT_PUBLIC_API_URL}/Auth`, id);
 
     if (typeof data === 'string') {
       setError(data);

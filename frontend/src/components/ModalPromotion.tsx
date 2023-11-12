@@ -70,7 +70,7 @@ export default function ModalPromotion({ showModalPromotion, setShowModalPromoti
       return;
     }
 
-    const data: Response | string = await putData('https://localhost:7208/api/PromotionControllers', newPromotion);
+    const data: Response | string = await putData(`${process.env.NEXT_PUBLIC_API_URL}/api/PromotionControllers`, newPromotion);
 
     if (typeof data === 'string') {
       setError(data);
@@ -91,7 +91,7 @@ export default function ModalPromotion({ showModalPromotion, setShowModalPromoti
       return;
     }
 
-    const data: Response | string = await deleteData('https://localhost:7208/api/PromotionControllers', id);
+    const data: Response | string = await deleteData(`${process.env.NEXT_PUBLIC_API_URL}/api/PromotionControllers`, id);
 
     if (typeof data === 'string') {
       setError(data);
@@ -129,7 +129,7 @@ export default function ModalPromotion({ showModalPromotion, setShowModalPromoti
       return;
     }
 
-    const data: Response | string = await postData('https://localhost:7208/api/PromotionControllers', newPromotion);
+    const data: Response | string = await postData(`${process.env.NEXT_PUBLIC_API_URL}/api/PromotionControllers`, newPromotion);
 
     if (typeof data === 'string') {
       setError(data);

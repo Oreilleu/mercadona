@@ -33,7 +33,7 @@ export const getData = async (url: string) => {
 }
 
 export const getProducts = async () => {
-  const data: Response | string = await getData('https://localhost:7208/api/ProductControllers/GetAll');
+  const data: Response | string = await getData(`${process.env.NEXT_PUBLIC_API_URL}/api/ProductControllers/GetAll`);
   if (typeof data === 'string') {
     return data;
   }
@@ -46,7 +46,7 @@ export const getProducts = async () => {
 };
 
 export const getCategory = async () => {
-  const data: Response | string = await getData('https://localhost:7208/api/Category/GetAll');
+  const data: Response | string = await getData(`${process.env.NEXT_PUBLIC_API_URL}/api/Category/GetAll`);
   if (typeof data === 'string') {
     return data;
   }
@@ -59,7 +59,7 @@ export const getCategory = async () => {
 };
 
 export const getPromotions = async () => {
-  const data: Response | string = await getData('https://localhost:7208/api/PromotionControllers/GetAll');
+  const data: Response | string = await getData(`${process.env.NEXT_PUBLIC_API_URL}/api/PromotionControllers/GetAll`);
   if (typeof data === 'string') {
     return data;
   }
@@ -79,7 +79,7 @@ export const getUsers = async () => {
   }
 
   try {
-    const response = await fetch("https://localhost:7208/Auth/GetAll",{
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Auth/GetAll`,{
       method: 'GET',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
     });
@@ -218,11 +218,10 @@ export const verifyToken = async () => {
   const token = checkToken();
 
   if(!token){
-    console.error("pas de token")
     return;
   }
 
-  const response = await fetch('https://localhost:7208/Auth/VerifyToken', {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Auth/VerifyToken`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(token),

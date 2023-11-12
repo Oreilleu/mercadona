@@ -8,7 +8,7 @@ export default function Banner({ title }: BannerProps) {
   return (
     <div className="container-banner">
       <div className="container-img">
-        <Image src={'/bannerMercadona.jpg'} alt="Bannière de fruit et légume" width={1900} height={600} />
+        <Image src={'/bannerMercadona.jpg'} alt="Bannière de fruit et légume" width={100} height={600} priority />
       </div>
       <h1>{title}</h1>
     </div>

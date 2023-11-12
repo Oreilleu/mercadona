@@ -11,12 +11,10 @@ export default function Connexion() {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  // Faire une route qui vérifie le token et qui renvoie un 401 si le token est invalide
-  // faire un fonction qui call cette route
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const response = await fetch('https://localhost:7208/Auth/Login', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Auth/Login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
