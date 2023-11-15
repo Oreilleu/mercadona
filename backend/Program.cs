@@ -12,6 +12,7 @@ using Microsoft.OpenApi.Models;
 using Mercadona.Services.CategoryService;
 using Mercadona.Services.PromotionService;
 using Mercadoa.Services.PromotionService;
+using Microsoft.Extensions.FileProviders;
 
 DotNetEnv.Env.Load();
 
@@ -139,7 +140,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "public")),
+    RequestPath = ""
+});
 
 app.UseHttpsRedirection();
 
