@@ -90,10 +90,7 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<DataContext>();
 
-    if (context.Database.CanConnect())
-    {
-        context.Database.Migrate();
-    }
+    context.Database.EnsureCreated();
 
     if (!context.Categories.Any())
     {
