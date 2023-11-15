@@ -140,10 +140,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+string publicFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "public");
+
+if (!Directory.Exists(publicFolderPath))
+{
+    Directory.CreateDirectory(publicFolderPath);
+}
+
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(Directory.GetCurrentDirectory(), "public")),
+    FileProvider = new PhysicalFileProvider(publicFolderPath),
     RequestPath = ""
 });
 
