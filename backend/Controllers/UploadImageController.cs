@@ -45,7 +45,7 @@ namespace Mercadona.Controllers
                     return BadRequest(serviceResponse);
                 }
 
-                string uploadDirectory = Path.Combine("wwwroot", "images");
+                string uploadDirectory = Path.Combine("public", "images");
 
                 if (!Directory.Exists(uploadDirectory))
                 {

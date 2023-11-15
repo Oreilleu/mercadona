@@ -139,7 +139,7 @@ namespace Mercadona.Services.ProductService
                 if (product == null)
                     throw new Exception($"Product with id {id} not found");
 
-                string deletePath = Path.Combine("wwwroot/images", product.ImageUrl.Split('/').Last());
+                string deletePath = Path.Combine("public/images", product.ImageUrl.Split('/').Last());
                 if (deletePath is null)
                 {
                     throw new Exception($"Image with id {id} not found");
