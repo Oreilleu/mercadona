@@ -49,8 +49,8 @@ export default function ModalPromotion({ showModalPromotion, setShowModalPromoti
 
   const modifyPromotion = async (newPromotion: Promotion, event: React.MouseEvent) => {
     event.preventDefault();
-    const startingDate = new Date(newPromotion.startingDate).toLocaleDateString();
-    const endingDate = new Date(newPromotion.endingDate).toLocaleDateString();
+    const startingDate = new Date(newPromotion.startingDate);
+    const endingDate = new Date(newPromotion.endingDate);
 
     if (!newPromotion.name || !newPromotion.startingDate || !newPromotion.endingDate || !newPromotion.discountPercentage) {
       if (Number.isNaN(newPromotion.discountPercentage)) {
@@ -107,8 +107,8 @@ export default function ModalPromotion({ showModalPromotion, setShowModalPromoti
   };
 
   const addPromotion = async (newPromotion: Promotion) => {
-    const startingDate = new Date(newPromotion.startingDate).toLocaleDateString();
-    const endingDate = new Date(newPromotion.endingDate).toLocaleDateString();
+    const startingDate = new Date(newPromotion.startingDate);
+    const endingDate = new Date(newPromotion.endingDate);
 
     if (!newPromotion.name || !newPromotion.startingDate || !newPromotion.endingDate || !newPromotion.discountPercentage) {
       if (Number.isNaN(newPromotion.discountPercentage)) {

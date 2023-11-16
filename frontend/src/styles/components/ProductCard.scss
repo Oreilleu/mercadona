@@ -6,6 +6,8 @@
   padding: 5px;
   margin-bottom: 10px;
   position: relative;
+  overflow: hidden;
+
 
   .container-button-admin-product {
     position: absolute;
@@ -38,13 +40,16 @@
   .content {
     height: 150px;
     padding-top: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    overflow: hidden;
+
+    p{
+      overflow: hidden;
+    }
 
 
     h3 {
       margin: 0;
+      overflow: hidden;
     }
 
     .price {

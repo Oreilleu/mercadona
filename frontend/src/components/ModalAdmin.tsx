@@ -122,7 +122,7 @@ export default function ModalAdmin({ showModalAdmin, setShowModalAdmin, users }:
                 {users?.map(
                   (user: User) =>
                     !user.isInitialAccount && (
-                      <li key={user.id} className="d-flex align-items-center gap-3">
+                      <li key={user.id} className="d-flex align-items-center gap-3 mt-3">
                         <p>Administrateur : </p>
                         <p>{user.username}</p>
                         <Button variant="primary" onClick={() => deleteUser(user.id)}>
