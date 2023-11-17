@@ -14,8 +14,8 @@ type ProductCardProps = {
   category: Category;
   promotion: Promotion | null;
   adminPanel?: boolean;
-  showModalProductCard: boolean;
-  setShowModalProductCard: (value: boolean) => void;
+  showModalProductCard?: boolean;
+  setShowModalProductCard?: (value: boolean) => void;
 };
 
 export default function ProductCard({
@@ -42,7 +42,7 @@ export default function ProductCard({
 
   return (
     <>
-      {showModalProductCard && (
+      {showModalProductCard && setShowModalProductCard && (
         <ModalProductCard
           productId={id}
           showModalProductCard={showModalProductCard}
@@ -59,7 +59,7 @@ export default function ProductCard({
       <article className="container-product-card">
         {adminPanel && (
           <div className="container-button-admin-product">
-            <Button onClick={() => setShowModalProductCard(!showModalProductCard)}>Manage</Button>
+            <Button onClick={() => setShowModalProductCard?.(!showModalProductCard)}>Manage</Button>
           </div>
         )}
 
