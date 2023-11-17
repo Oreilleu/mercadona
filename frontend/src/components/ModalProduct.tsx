@@ -69,7 +69,7 @@ export default function ModalProduct({ showModalProduct, setShowModalProduct, ca
 
       if (dataImage.success) {
         console.log('Image ajoutée');
-        window.location.reload();
+        setShowModalProduct(false);
       } else {
         setError(dataImage.message);
         return;

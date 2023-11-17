@@ -1,6 +1,5 @@
 import { Category, Promotion } from '@/utils/types';
 import Image from 'next/image';
-import { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import ModalProductCard from './ModalProductCard';
 
@@ -15,6 +14,8 @@ type ProductCardProps = {
   category: Category;
   promotion: Promotion | null;
   adminPanel?: boolean;
+  showModalProductCard: boolean;
+  setShowModalProductCard: (value: boolean) => void;
 };
 
 export default function ProductCard({
@@ -28,8 +29,9 @@ export default function ProductCard({
   category,
   promotion,
   adminPanel = false,
+  showModalProductCard,
+  setShowModalProductCard,
 }: ProductCardProps) {
-  const [manageButton, setManageButton] = useState<boolean>(false);
   const actualDate = new Date().toLocaleDateString();
   const startingDate = promotion && new Date(promotion.startingDate).toLocaleDateString();
   const endingDate = promotion && new Date(promotion.endingDate).toLocaleDateString();
@@ -40,11 +42,11 @@ export default function ProductCard({
 
   return (
     <>
-      {manageButton && (
+      {showModalProductCard && (
         <ModalProductCard
           productId={id}
-          showModalProductCard={manageButton}
-          setShowModalProductCard={setManageButton}
+          showModalProductCard={showModalProductCard}
+          setShowModalProductCard={setShowModalProductCard}
           categories={categories}
           promotions={promotions}
           productName={name}
@@ -57,7 +59,7 @@ export default function ProductCard({
       <article className="container-product-card">
         {adminPanel && (
           <div className="container-button-admin-product">
-            <Button onClick={() => setManageButton(!manageButton)}>Manage</Button>
+            <Button onClick={() => setShowModalProductCard(!showModalProductCard)}>Manage</Button>
           </div>
         )}
 

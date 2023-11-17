@@ -89,7 +89,7 @@ export default function ModalProductCard({
       console.log('Le produit a bien été modifier');
 
       if (!imageFile) {
-        return window.location.reload();
+        return setShowModalProductCard(false);
       }
 
       const formData = new FormData();
@@ -104,7 +104,8 @@ export default function ModalProductCard({
 
       if (dataImage.success) {
         console.log('Image ajoutée');
-        window.location.reload();
+        setShowModalProductCard(false);
+        setError('');
       } else {
         setError(dataImage.message);
         return;
@@ -130,7 +131,7 @@ export default function ModalProductCard({
 
     if (data.success) {
       console.log('La catégorie a bien été supprimer');
-      window.location.reload();
+      setShowModalProductCard(false);
     } else {
       setError(data.message);
     }

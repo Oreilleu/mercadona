@@ -79,7 +79,8 @@ export default function ModalPromotion({ showModalPromotion, setShowModalPromoti
 
     if (data.success) {
       console.log('La promotion a bien été ajoutée');
-      window.location.reload();
+      setShowModalPromotion(false);
+      setError('');
     } else {
       setError(data.message);
     }
@@ -100,7 +101,8 @@ export default function ModalPromotion({ showModalPromotion, setShowModalPromoti
 
     if (data.success) {
       console.log('La catégorie a bien été supprimer');
-      window.location.reload();
+      setShowModalPromotion(false);
+      setError('');
     } else {
       setError(data.message);
     }
@@ -138,7 +140,8 @@ export default function ModalPromotion({ showModalPromotion, setShowModalPromoti
 
     if (data.success) {
       console.log('La promotion a bien été ajoutée');
-      window.location.reload();
+      setShowModalPromotion(false);
+      setError('');
     } else {
       setError(data.message);
     }

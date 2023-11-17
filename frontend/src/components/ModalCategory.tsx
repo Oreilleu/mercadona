@@ -34,7 +34,8 @@ export default function ModalCategory({ showModalCategory, setShowModalCategory,
     setError('');
   };
 
-  const modifyCategory = async (newCategory: Category | undefined) => {
+  const modifyCategory = async (newCategory: Category | undefined, event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    event.preventDefault();
     if (!newCategory?.name) {
       setError('Veuillez renseigner un nom de catégorie');
       return;
@@ -52,7 +53,8 @@ export default function ModalCategory({ showModalCategory, setShowModalCategory,
 
     if (data.success) {
       console.log('La catégorie a bien été modifier');
-      window.location.reload();
+      setShowModalCategory(false);
+      setError('');
     } else {
       setError(data.message);
     }
@@ -73,7 +75,8 @@ export default function ModalCategory({ showModalCategory, setShowModalCategory,
 
     if (data.success) {
       console.log('La catégorie a bien été supprimer');
-      window.location.reload();
+      setShowModalCategory(false);
+      setError('');
     } else {
       setError(data.message);
     }
@@ -94,7 +97,8 @@ export default function ModalCategory({ showModalCategory, setShowModalCategory,
 
     if (data.success) {
       console.log('La catégorie a bien été ajoutée');
-      window.location.reload();
+      setShowModalCategory(false);
+      setError('');
     } else {
       setError(data.message);
     }
@@ -138,7 +142,7 @@ export default function ModalCategory({ showModalCategory, setShowModalCategory,
                                   }
                                 ></Form.Control>
                               </Form.Group>
-                              <Button type="submit" onClick={() => modifyCategory(updateCategory)}>
+                              <Button type="submit" onClick={(event) => modifyCategory(updateCategory, event)}>
                                 Modifier
                               </Button>
                               <p

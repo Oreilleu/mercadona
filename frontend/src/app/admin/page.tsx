@@ -23,6 +23,7 @@ export default function Admin() {
   const [showModalPromotion, setShowModalPromotion] = useState(false);
   const [showModalProduct, setShowModalProduct] = useState(false);
   const [showModalAdmin, setShowModalAdmin] = useState(false);
+  const [showModalProductCard, setShowModalProductCard] = useState<boolean>(false);
 
   const [error, setError] = useState<string>('');
 
@@ -79,7 +80,7 @@ export default function Admin() {
     fetchCategory();
     fetchPromotions();
     fetchUsers();
-  }, []);
+  }, [showModalProduct, showModalCategory, showModalPromotion, showModalAdmin, showModalProductCard]);
 
   return (
     <Layout className="container-admin">
@@ -151,6 +152,8 @@ export default function Admin() {
                         category={product.category}
                         promotion={product.promotion}
                         adminPanel
+                        showModalProductCard={showModalProductCard}
+                        setShowModalProductCard={setShowModalProductCard}
                       />
                     </li>
                   ))}

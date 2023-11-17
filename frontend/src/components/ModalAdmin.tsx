@@ -75,7 +75,8 @@ export default function ModalAdmin({ showModalAdmin, setShowModalAdmin, users }:
 
     if (data.success) {
       console.log('Administrateur créer');
-      window.location.reload();
+      setShowModalAdmin(false);
+      setError('');
     } else {
       setError(data.message);
     }
