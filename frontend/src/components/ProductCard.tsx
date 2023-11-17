@@ -1,5 +1,6 @@
 import { Category, Promotion } from '@/utils/types';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import ModalProductCard from './ModalProductCard';
 
@@ -14,8 +15,8 @@ type ProductCardProps = {
   category: Category;
   promotion: Promotion | null;
   adminPanel?: boolean;
-  showModalProductCard?: boolean;
-  setShowModalProductCard?: (value: boolean) => void;
+  refreshProductCard?: boolean;
+  setRefreshProductCard?: (value: boolean) => void;
 };
 
 export default function ProductCard({
@@ -29,20 +30,30 @@ export default function ProductCard({
   category,
   promotion,
   adminPanel = false,
-  showModalProductCard,
-  setShowModalProductCard,
+  refreshProductCard,
+  setRefreshProductCard,
 }: ProductCardProps) {
   const actualDate = new Date().toLocaleDateString();
   const startingDate = promotion && new Date(promotion.startingDate).toLocaleDateString();
   const endingDate = promotion && new Date(promotion.endingDate).toLocaleDateString();
 
+  const [showModalProductCard, setShowModalProductCard] = useState<boolean>(false);
+
   const isActivePromotion = actualDate >= String(startingDate) && actualDate <= String(endingDate);
+
+  useEffect(() => {
+    if (showModalProductCard) {
+      setRefreshProductCard?.(true);
+    } else {
+      setRefreshProductCard?.(false);
+    }
+  }, [showModalProductCard]);
 
   if (!id) return null;
 
   return (
     <>
-      {showModalProductCard && setShowModalProductCard && (
+      {showModalProductCard && (
         <ModalProductCard
           productId={id}
           showModalProductCard={showModalProductCard}

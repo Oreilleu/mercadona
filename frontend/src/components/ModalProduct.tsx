@@ -56,6 +56,8 @@ export default function ModalProduct({ showModalProduct, setShowModalProduct, ca
 
     if (data.success) {
       console.log('Le produit a bien été ajoutée');
+      setProduct({ name: '', price: 0, description: '', categoryId: undefined, promotionId: undefined });
+      setError('');
 
       const formData = new FormData();
       formData.append('imageFile', imageFile);
@@ -69,7 +71,9 @@ export default function ModalProduct({ showModalProduct, setShowModalProduct, ca
 
       if (dataImage.success) {
         console.log('Image ajoutée');
+        setImageFile(undefined);
         setShowModalProduct(false);
+        setError('');
       } else {
         setError(dataImage.message);
         return;

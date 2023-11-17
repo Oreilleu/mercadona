@@ -4,8 +4,6 @@ import { useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 
 type ModalProductCardProps = {
-  showModalProductCard: boolean;
-  setShowModalProductCard: (value: boolean) => void;
   categories: Category[];
   promotions: Promotion[];
   productId: number;
@@ -14,11 +12,11 @@ type ModalProductCardProps = {
   productDescription: string;
   productCategory: Category;
   productPromotion: Promotion | null;
+  showModalProductCard: boolean;
+  setShowModalProductCard: (value: boolean) => void;
 };
 
 export default function ModalProductCard({
-  showModalProductCard,
-  setShowModalProductCard,
   categories,
   promotions,
   productId,
@@ -27,6 +25,8 @@ export default function ModalProductCard({
   productPrice,
   productCategory,
   productPromotion,
+  showModalProductCard,
+  setShowModalProductCard,
 }: ModalProductCardProps) {
   const [handleTab, setHandleTab] = useState<'put' | 'delete'>('put');
   const [imageFile, setImageFile] = useState<File>();
