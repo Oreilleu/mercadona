@@ -64,7 +64,7 @@ export default function ProductCard({
         )}
 
         <div className="container-img">
-          <Image src={image} alt="banner" width={300} height={260} priority />
+          <Image src={image} alt="banner" width={300} height={260} />
         </div>
 
         <div className="content">
