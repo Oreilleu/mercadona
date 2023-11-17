@@ -1,5 +1,6 @@
 import { deleteData, postData } from '@/utils/services';
 import { CreateUser, User } from '@/utils/types';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 
@@ -16,6 +17,7 @@ export default function ModalAdmin({ showModalAdmin, setShowModalAdmin, users }:
     username: '',
     password: '',
   });
+  const router = useRouter();
 
   const handleClose = () => {
     setShowModalAdmin(false);
@@ -94,7 +96,7 @@ export default function ModalAdmin({ showModalAdmin, setShowModalAdmin, users }:
     if (data.success) {
       console.log('Administrateur supprimé');
       document.cookie = `token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-      window.location.href = '/';
+      router.push('/');
     } else {
       setError(data.message);
     }
