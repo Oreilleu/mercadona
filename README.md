@@ -5,6 +5,8 @@
 Le projet est divisé en trois parties. Un frontend, un backend et un dossier de test pour le backend.
 Un guide d'utilisation est fournit avec la livraison de l'application.
 
+Lien de la documentation : https://meteor-croissant-cb5.notion.site/Documentation-Mercadona-7eebfa8b905b48ba8393803bcea15d61
+
 ## Prérequis
 
 Frontend : 
