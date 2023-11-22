@@ -33,13 +33,13 @@ export default function ProductCard({
   refreshProductCard,
   setRefreshProductCard,
 }: ProductCardProps) {
-  const actualDate = new Date().toLocaleDateString();
-  const startingDate = promotion && new Date(promotion.startingDate).toLocaleDateString();
-  const endingDate = promotion && new Date(promotion.endingDate).toLocaleDateString();
+  const actualDate = new Date();
+  const startingDate = promotion && new Date(promotion.startingDate);
+  const endingDate = promotion && new Date(promotion.endingDate);
 
   const [showModalProductCard, setShowModalProductCard] = useState<boolean>(false);
 
-  const isActivePromotion = actualDate >= String(startingDate) && actualDate <= String(endingDate);
+  const isActivePromotion = startingDate && endingDate && actualDate >= startingDate && actualDate <= endingDate;
 
   useEffect(() => {
     if (showModalProductCard) {
