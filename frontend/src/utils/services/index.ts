@@ -3,14 +3,14 @@ import { Category, Product, Promotion, Response, User } from "../types";
 export const filterproducts = (productsData: Product[], selectedCategory: string, showPromotion: boolean) => {
   let filteredProducts = [...productsData];
 
-  const acutalDate = new Date().toLocaleDateString();
+  const acutalDate = new Date()
 
   if (selectedCategory) {
     filteredProducts = filteredProducts.filter((product: Product) => product.category.name === selectedCategory);
   }
 
   if (showPromotion) {
-    filteredProducts = filteredProducts.filter((product: Product) => product.promotion && acutalDate >= new Date(product.promotion.startingDate).toLocaleDateString() && acutalDate <= new Date(product.promotion.endingDate).toLocaleDateString());
+    filteredProducts = filteredProducts.filter((product: Product) => product.promotion && acutalDate >= new Date(product.promotion.startingDate) && acutalDate <= new Date(product.promotion.endingDate));
   }
 
   return filteredProducts;
